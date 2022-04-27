@@ -92,20 +92,8 @@ app.post('/hs_01/api/bloggers', (req, res) => {
     */
     const errors = [];
     const reg = new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?");
-    if (!req.body.name.trim()) {
-        const error = {
-            message: "Type error: the field is empty",
-            field: "name"
-        };
-        errors.push(error);
-    }
-    if (req.body.name.length > 15) {
-        const error = {
-            message: "Yor name should be less than 15 symbols",
-            field: "name"
-        };
-        errors.push(error);
-    }
+    console.log(req.body.name);
+    console.log(typeof req.body.name);
     if (typeof req.body.name !== "string") {
         const error = {
             message: "Name should be the string",
@@ -113,25 +101,54 @@ app.post('/hs_01/api/bloggers', (req, res) => {
         };
         errors.push(error);
     }
-    if (!req.body.youtubeUrl.trim() && req.body.youtubeUrl < 100) {
-        const error = {
-            message: "Error type: the field is empty",
-            field: "youtubeUrl"
-        };
-        errors.push(error);
+    else {
+        if (!req.body.name.trim()) {
+            const error = {
+                message: "Type error: the field is empty",
+                field: "name"
+            };
+            errors.push(error);
+        }
+        if (req.body.name.length > 15) {
+            const error = {
+                message: "Yor name should be less than 15 symbols",
+                field: "name"
+            };
+            errors.push(error);
+        }
+        //const test =  reg.test(req.body.youtubeUrl)
+        if (!reg.test(req.body.youtubeUrl)) {
+            console.log('if');
+            const error = {
+                message: "Error type: the field is not a valid url",
+                field: "youtubeUrl"
+            };
+            errors.push(error);
+        }
+        else {
+            console.log('else', req.body.youtubeUrl.length);
+            if (!req.body.youtubeUrl.trim()) {
+                const error = {
+                    message: "Error type: the field is empty",
+                    field: "youtubeUrl"
+                };
+                errors.push(error);
+            }
+            if (req.body.youtubeUrl.length > 100) {
+                console.log('url err');
+                const error = {
+                    message: "Error type: the field is empty",
+                    field: "youtubeUrl"
+                };
+                errors.push(error);
+            }
+        }
+        /*
+        * Если ошибка юзера - 201. result code 1, ты ошибся.
+        *
+        * */
     }
-    //const test =  reg.test(req.body.youtubeUrl)
-    if (!reg.test(req.body.youtubeUrl)) {
-        const error = {
-            message: "Error type: the field is not a valid url",
-            field: "youtubeUrl"
-        };
-        errors.push(error);
-    }
-    /*
-    * Если ошибка юзера - 201. result code 1, ты ошибся.
-    *
-    * */
+    console.log(errors);
     if (errors.length !== 0) {
         const responseObj = {
             errorsMessages: errors,
@@ -196,13 +213,6 @@ app.get('/hs_01/api/bloggers/:id', (req, res) => {
         res.send(blogger);
     }
 });
-/*
-* Как проверить, что айдишка - намбер.
-* При проверке на то, что айдишка вне диапазона, ничего не работает.
-* */
-// app.get('/hs_01/api/bloggers/:id', (req: Request, res: Response) => {
-//     res.send('ping')
-// })
 app.put('/hs_01/api/bloggers/:id', (req, res) => {
     /*
     * Найти по айдишнику блогера в массиве.
