@@ -1,11 +1,7 @@
 import express, {Request, Response} from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
-import {symlink} from "fs";
-import Type = module
-import * as module from "module";
-import {type} from "os";
-import {log} from "util";
+
 
 // create express app
 const app = express()
@@ -22,7 +18,10 @@ const jsonBodyMiddleware = bodyParser.json()
 app.use(jsonBodyMiddleware)
 // app.use(bodyParser.json()) - в оригинале
 
-const port = 5001
+
+
+
+const port = process.env.PORT || 5001
 
 let bloggers: BloggerViewModelType[] = [
     {id: 1, name: "Dimych", youtubeUrl: "https://www.youtube.com/c/ITKAMASUTRA/videos"},

@@ -18,7 +18,7 @@ const jsonBodyMiddleware = body_parser_1.default.json();
 // этот мидлварь засовываем сюда:
 app.use(jsonBodyMiddleware);
 // app.use(bodyParser.json()) - в оригинале
-const port = 5001;
+const port = process.env.PORT || 5001;
 let bloggers = [
     { id: 1, name: "Dimych", youtubeUrl: "https://www.youtube.com/c/ITKAMASUTRA/videos" },
     { id: 2, name: "Lenko", youtubeUrl: "https://www.youtube.com/channel/UCkgXcNSMktRtfMiv64Pxo5g/videos" },
