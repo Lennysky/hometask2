@@ -68,6 +68,20 @@ let posts = [
         bloggerName: 'Yamshchikov'
     }
 ];
+const errorsCollect = (errors, message, field) => {
+    const error = {
+        message: message,
+        field: field
+    };
+    errors.push(error);
+};
+const errorResponse = (res, errorsMessages, resultCode) => {
+    const responseObj = {
+        errorsMessages: errorsMessages,
+        resultCode: resultCode
+    };
+    res.status(resultCode).send(responseObj);
+};
 app.get('/', (req, res) => {
     res.send('ping');
 });
@@ -92,69 +106,42 @@ app.post('/hs_01/api/bloggers', (req, res) => {
     */
     const errors = [];
     const reg = new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?");
-    console.log(req.body.name);
-    console.log(typeof req.body.name);
+    /*    console.log(req.body.name)
+        console.log(typeof req.body.name)*/
+    // -------------- Проверка имени --------------------------
     if (typeof req.body.name !== "string") {
-        const error = {
-            message: "Name should be the string",
-            field: "name"
-        };
-        errors.push(error);
+        console.log(req.body.name);
+        errorsCollect(errors, "Error Type: Name should be the string", "name");
     }
     else {
         if (!req.body.name.trim()) {
-            const error = {
-                message: "Type error: the field is empty",
-                field: "name"
-            };
-            errors.push(error);
+            errorsCollect(errors, "Error Type: the field is empty", "name");
         }
         if (req.body.name.length > 15) {
-            const error = {
-                message: "Yor name should be less than 15 symbols",
-                field: "name"
-            };
-            errors.push(error);
+            errorsCollect(errors, "Error Type: Yor name should be less than 15 symbols", "name");
         }
-        //const test =  reg.test(req.body.youtubeUrl)
-        if (!reg.test(req.body.youtubeUrl)) {
-            console.log('if');
-            const error = {
-                message: "Error type: the field is not a valid url",
-                field: "youtubeUrl"
-            };
-            errors.push(error);
+        // ------------ Проверка урла --------------------------------------
+    }
+    //const test =  reg.test(req.body.youtubeUrl)
+    if (!reg.test(req.body.youtubeUrl)) {
+        errorsCollect(errors, "Error Type: your Url is empty or not valid", "youtubeUrl");
+    }
+    else {
+        //console.log('else', req.body.youtubeUrl.length)
+        if (!req.body.youtubeUrl.trim()) {
+            errorsCollect(errors, "Error type: the field is empty", "youtubeUrl");
         }
-        else {
-            console.log('else', req.body.youtubeUrl.length);
-            if (!req.body.youtubeUrl.trim()) {
-                const error = {
-                    message: "Error type: the field is empty",
-                    field: "youtubeUrl"
-                };
-                errors.push(error);
-            }
-            if (req.body.youtubeUrl.length > 100) {
-                console.log('url err');
-                const error = {
-                    message: "Error type: the field is empty",
-                    field: "youtubeUrl"
-                };
-                errors.push(error);
-            }
+        if (req.body.youtubeUrl.length > 100) {
+            //console.log('url err')
+            errorsCollect(errors, "Error type: the field should be less than 100 symbols", "youtubeUrl");
         }
         /*
         * Если ошибка юзера - 201. result code 1, ты ошибся.
         *
         * */
     }
-    console.log(errors);
     if (errors.length !== 0) {
-        const responseObj = {
-            errorsMessages: errors,
-            resultCode: 400
-        };
-        res.status(400).send(responseObj);
+        errorResponse(res, errors, 400);
     }
     else {
         const body = req.body;
@@ -180,32 +167,21 @@ app.get('/hs_01/api/bloggers/:id', (req, res) => {
     const id = parseInt(req.params.id);
     const blogger = bloggers.find(bl => bl.id === id);
     if (!id) {
-        const error = {
-            message: "Error type: You have no id",
-            field: "id"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error type: You have no id", "id");
+        res.send(400);
     }
-    if (Number.isNaN(id)) {
-        const error = {
-            message: "Error type: Your id is not a number",
-            field: "id"
-        };
-        errors.push(error);
-    }
+    /*    if (Number.isNaN(id)) {
+            const error: FieldErrorType = {
+                message: "Error type: Your id is not a number",
+                field: "id"
+            }
+            errors.push(error)
+        }*/
     if (!blogger) {
-        const error = {
-            message: "Error type: Your id is out of range",
-            field: "id"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error type: Your id is out of range", "id");
     }
     if (errors.length !== 0) {
-        const responseObject = {
-            errorsMessages: errors,
-            resultCode: 404
-        };
-        res.status(404).send(responseObject);
+        errorResponse(res, errors, 404);
     }
     else {
         const blogger = bloggers.find(bl => bl.id === id);
@@ -235,90 +211,50 @@ app.put('/hs_01/api/bloggers/:id', (req, res) => {
     * Проверка, пустой ли массив с ошибками.
     * Запилить элс.
     */
-    /*
-    * Вопрос ТП: как работает это: const blogger = bloggers.find(bl => bl.id === id)
-    * Т.е. в случае тру - в переменной будет объект, в фолс - фолс.
-    * Может, правильно и блогеру вставить тип или так не делают?
-    * const blogger: BloggerViewModelType = bloggers.find( bl => bl.id === id)
-* */
     const errors = [];
     const id = parseInt(req.params.id);
     const blogger = bloggers.find(bl => bl.id === id);
     const reg = new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?");
     if (!id) {
-        const error = {
-            message: "Error Type: You have no id",
-            field: "id"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error Type: You have no id", "id");
     }
     console.log('id', id);
-    if (Number.isNaN(id)) {
-        const error = {
-            message: "Error Type: id is not a number",
-            field: "id"
-        };
-        errors.push(error);
-    }
-    if (!req.body.name) {
-        const error = {
-            message: "Error Type: You should define your name",
-            field: "name"
-        };
-        errors.push(error);
-    }
+    /*    if (Number.isNaN(id)) {
+            const error: FieldErrorType = {
+                message: "Error Type: id is not a number",
+                field: "id"
+            }
+            errors.push(error)
+        }*/
+    // ----------------------------------------- Проверка name ------------------------------------------------
     if (typeof req.body.name !== "string") {
-        const error = {
-            message: "Error Type: Your name should be a string type",
-            field: "name"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error Type: Your name should be a string type", "name");
     }
-    if (req.body.name.length > 15) {
-        console.log(req.body);
-        const error = {
-            message: "Error Type: You should enter the name less than 15 symbols",
-            field: "name"
-        };
-        errors.push(error);
+    else {
+        if (!req.body.name.trim()) {
+            errorsCollect(errors, "Error Type: You should define your name", "name");
+        }
+        if (req.body.name.length > 15) {
+            errorsCollect(errors, "Error Type: You should enter the name less than 15 symbols", "name");
+        }
     }
-    console.log(req.body.youtubeUrl);
+    //    console.log(req.body.youtubeUrl)
+    // -------------------------------------- Проверка youtubeUrl --------------------------------------------
+    if (typeof req.body.youtubeUrl !== "string") {
+        errorsCollect(errors, "Error Type: Your link should be a string", "youtubeUrl");
+    }
     if (!req.body.youtubeUrl) {
-        const error = {
-            message: "Error Type: You should specify your link",
-            field: "youtubeUrl"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error Type: You should specify your link", "youtubeUrl");
     }
-    console.log(req.body.youtubeUrl);
     console.log(req.body.youtubeUrl);
     if (req.body.youtubeUrl.length > 100) {
-        const error = {
-            message: "Error Type: Your link should be less than 100 symbols",
-            field: "youtubeUrl"
-        };
-        errors.push(error);
-    }
-    if (typeof req.body.youtubeUrl !== "string") {
-        const error = {
-            message: "Error Type: Your link should be a string",
-            field: "youtubeUrl"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error Type: Your link should be less than 100 symbols", "youtubeUrl");
     }
     if (!reg.test(req.body.youtubeUrl)) {
-        const error = {
-            message: "Error Type: You should specify valid url",
-            field: "youtubeUrl"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error Type: You should specify valid url", "youtubeUrl");
     }
     if (!blogger) {
-        const error = {
-            message: "Error Type: Your id is out of range",
-            field: "id"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error Type: Your id is out of range", "id");
     }
     if (errors.length !== 0 || !blogger) {
         const responseObj = {
