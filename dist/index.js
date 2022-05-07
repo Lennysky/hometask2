@@ -243,29 +243,36 @@ app.put('/hs_01/api/bloggers/:id', (req, res) => {
     if (typeof req.body.youtubeUrl !== "string") {
         errorsCollect(errors, "Error Type: Your link should be a string", "youtubeUrl");
     }
-    if (!req.body.youtubeUrl) {
-        errorsCollect(errors, "Error Type: You should specify your link", "youtubeUrl");
+    else {
+        if (!req.body.youtubeUrl) {
+            errorsCollect(errors, "Error Type: You should specify your link", "youtubeUrl");
+        }
+        console.log(req.body.youtubeUrl);
+        if (req.body.youtubeUrl.length > 100) {
+            errorsCollect(errors, "Error Type: Your link should be less than 100 symbols", "youtubeUrl");
+        }
+        if (!reg.test(req.body.youtubeUrl)) {
+            errorsCollect(errors, "Error Type: You should specify valid url", "youtubeUrl");
+        }
     }
-    console.log(req.body.youtubeUrl);
-    if (req.body.youtubeUrl.length > 100) {
-        errorsCollect(errors, "Error Type: Your link should be less than 100 symbols", "youtubeUrl");
-    }
-    if (!reg.test(req.body.youtubeUrl)) {
-        errorsCollect(errors, "Error Type: You should specify valid url", "youtubeUrl");
+    if (errors.length !== 0) {
+        errorResponse(res, errors, 400);
     }
     if (!blogger) {
         errorsCollect(errors, "Error Type: Your id is out of range", "id");
+        errorResponse(res, errors, 404);
     }
-    if (errors.length !== 0 || !blogger) {
-        const responseObj = {
-            errorsMessages: errors,
-            resultCode: blogger ? 400 : 404
-        };
-        res.send(responseObj);
-    }
+    /*    if (errors.length !== 0 || !blogger) {
+            const responseObj: APIErrorResultType = {
+                errorsMessages: errors,
+                resultCode: blogger ? 400 : 404
+            }
+            res.send(responseObj)
+        }*/
     else {
         const body = req.body;
         blogger.name = body.name;
+        blogger.youtubeUrl = body.youtubeUrl;
         res.send(204);
     }
 });
@@ -286,34 +293,30 @@ app.delete('/hs_01/api/bloggers/:id', (req, res) => {
     const id = parseInt(req.params.id);
     const blogger = bloggers.find(bl => bl.id === id);
     if (!id) {
-        const error = {
-            message: "Error Type: You should specify the id",
-            field: "id"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error Type: You should specify the id", "id");
     }
-    // Кмк, эта проверка не нужна, т.к. выше мы из айдишки делаем намбер.
-    if (Number.isNaN(req.params.id)) {
-        const error = {
-            message: "Error Type: Your id should be a number",
-            field: "id"
-        };
-        errors.push(error);
-    }
+    /*    // Кмк, эта проверка не нужна, т.к. выше мы из айдишки делаем намбер.
+        if (Number.isNaN(req.params.id)) {
+            const error: FieldErrorType = {
+                message: "Error Type: Your id should be a number",
+                field: "id"
+            }
+            errors.push(error)
+        }*/
     if (!blogger) {
-        const error = {
-            message: "Error Type: Your id is out of range",
-            field: "id"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error Type: Your id is out of range", "id");
+        errorResponse(res, errors, 404);
     }
-    if (errors.length !== 0 || !blogger) {
-        const responseObj = {
-            errorsMessages: errors,
-            resultCode: !blogger ? 400 : 404
-        };
-        res.send(responseObj);
+    if (errors.length !== 0) {
+        errorResponse(res, errors, 400);
     }
+    /*  if (errors.length !== 0 || !blogger) {
+          const responseObj: APIErrorResultType = {
+              errorsMessages: errors,
+              resultCode: !blogger ? 400 : 404
+          }
+          res.send(responseObj)
+      } */
     else {
         bloggers = bloggers.filter(bl => bl.id === id);
         res.send(204);
@@ -353,89 +356,51 @@ app.post('/hs_01/api/posts', (req, res) => {
     * БлогерНэйм -
     * */
     const errors = [];
-    if (!req.body.title.trim()) {
-        const error = {
-            message: "Error Type: You should specify the title",
-            field: "title"
-        };
-        errors.push(error);
-    }
+    // ------------------------------------------------ Проеврка тайтла ------------------------------------------------
     if (typeof req.body.title !== "string") {
-        const error = {
-            message: "Error Type: Your title should by type string",
-            field: "string"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error Type: Your title should by type string", "string");
     }
-    if (req.body.title.length > 30) {
-        const error = {
-            message: "Error Type: Your title should be less than 30 symbols",
-            field: "title"
-        };
-        errors.push(error);
+    else {
+        if (!req.body.title.trim()) {
+            errorsCollect(errors, "Error Type: You should specify the title", "title");
+        }
+        if (req.body.title.length > 30) {
+            errorsCollect(errors, "Error Type: Your title should be less than 30 symbols", "title");
+        }
     }
-    if (!req.body.shortDescription.trim()) {
-        const error = {
-            message: "Error Type: You should specify the short description",
-            field: "shortDescription"
-        };
-        errors.push(error);
-    }
+    // ---------------------------------------- Проверка короткого описания ---------------------------------------------
     if (typeof req.body.shortDescription !== "string") {
-        const error = {
-            message: "Error Type: Your input should be the string type",
-            field: "shortDescription"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error Type: Your input should be the string type", "shortDescription");
     }
-    if (req.body.shortDescription.length > 100) {
-        const error = {
-            message: "Error Type: You should enter less than 100 symobls",
-            field: "shortDescription"
-        };
-        errors.push(error);
+    else {
+        if (!req.body.shortDescription.trim()) {
+            errorsCollect(errors, "Error Type: You should specify the short description", "shortDescription");
+        }
+        if (req.body.shortDescription.length > 100) {
+            errorsCollect(errors, "Error Type: You should enter less than 100 symobls", "shortDescription");
+        }
     }
-    if (!req.body.content) {
-        const error = {
-            message: "Error Type: Your content is empty",
-            field: "content"
-        };
-        errors.push(error);
-    }
+    // ------------------------------------------- Проверка контента -----------------------------------------------------
     if (typeof req.body.content !== "string") {
-        const error = {
-            message: "Error Type: Your content should be type string",
-            field: "content"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error Type: Your content should be type string", "content");
     }
+    else {
+        if (!req.body.content.trim()) {
+            errorsCollect(errors, "Error Type: Your content is empty", "content");
+        }
+        if (req.body.content.length > 1000) {
+            errorsCollect(errors, "Error Type: Your content should be less than 1000 symbols", "content");
+        }
+    }
+    // ------------------------------------------ Проверка BloggerId ------------------------------------------------------
     if (!req.body.bloggerId) {
-        const error = {
-            message: "Error Type: You have empty id",
-            field: "bloggerId"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error Type: You have empty id", "bloggerId");
     }
     if (typeof req.body.bloggerId !== "number") {
-        const error = {
-            message: "Error Type: You should enter a number",
-            field: "bloggerId"
-        };
-        errors.push(error);
-    }
-    if (req.body.content.length > 1000) {
-        const error = {
-            message: "Error Type: Your content should be less than 1000 symbols",
-            field: "content"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error Type: You should enter a number", "bloggerId");
     }
     if (errors.length !== 0) {
-        const responseObj = {
-            errorsMessages: errors,
-            resultCode: 404
-        };
-        res.send(responseObj);
+        errorResponse(res, errors, 400);
     }
     else {
         const body = req.body;
@@ -467,26 +432,22 @@ app.get('/hs_01/api/posts/:id', (req, res) => {
     const id = parseInt(req.params.id);
     const post = posts.find(p => p.id === id);
     if (!id) {
-        const error = {
-            message: "Error Type: You should specify some id",
-            field: "id"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error Type: You should specify some id", "id");
     }
     if (!post) {
-        const error = {
-            message: "Error Type: Your id is out of range",
-            field: "id"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error Type: Your id is out of range", "id");
+        errorResponse(res, errors, 404);
     }
-    if (errors.length !== 0 || !post) {
-        const responseObj = {
-            errorsMessages: errors,
-            resultCode: 404
-        };
-        res.send(responseObj);
+    if (errors.length !== 0) {
+        errorResponse(res, errors, 400);
     }
+    /*    if (errors.length !== 0 || !post) {
+            const responseObj: APIErrorResultType = {
+                errorsMessages: errors,
+                resultCode: 404
+            }
+            res.send(responseObj)
+        } */
     else {
         res.status(200).send(post);
     }
@@ -522,103 +483,65 @@ app.put('/hs_01/api/posts/:id', (req, res) => {
     const id = parseInt(req.params.id);
     const post = posts.find(p => p.id === id);
     if (!id) {
-        const error = {
-            message: "Error Type: You should specify the id",
-            field: "id"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error Type: You should specify the id", "id");
     }
-    if (!post) {
-        const error = {
-            message: "Error Type: Your id is out of range",
-            field: "id"
-        };
-        errors.push(error);
-    }
-    if (!req.body.title) {
-        const error = {
-            message: "Error Type: Your should specify the title",
-            field: "title"
-        };
-        errors.push(error);
-    }
+    // --------------------------------- Проверка тайтла ---------------------------------------------------------------
     if (typeof req.body.title !== "string") {
-        const error = {
-            message: "Error Type: Your title should be string type",
-            field: "title"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error Type: Your title should be string type", "title");
     }
-    if (req.body.title.length > 30) {
-        const error = {
-            message: "Error Type: Your title should be less than 30 symbols",
-            field: "title"
-        };
-        errors.push(error);
+    else {
+        if (!req.body.title.trim()) {
+            errorsCollect(errors, "Error Type: Your should specify the title", "title");
+        }
+        if (req.body.title.length > 30) {
+            errorsCollect(errors, "Error Type: Your title should be less than 30 symbols", "title");
+        }
     }
-    if (!req.body.shortDescription) {
-        const error = {
-            message: "Error Type: You should specify the short descripiton",
-            field: "shortDescription"
-        };
-        errors.push(error);
-    }
+    // --------------------------------- Проверка короткого описания ----------------------------------------------------
     if (typeof req.body.shortDescription !== "string") {
-        const error = {
-            message: "Error Type: your short description should be string type",
-            field: "shortDescription"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error Type: your short description should be string type", "shortDescription");
     }
-    if (req.body.shortDescription.length > 100) {
-        const error = {
-            message: "Error Type: Your short description should be less than 100",
-            field: "shortDescription"
-        };
-        errors.push(error);
+    else {
+        if (!req.body.shortDescription.trim()) {
+            errorsCollect(errors, "Error Type: You should specify the short descripiton", "shortDescription");
+        }
+        if (req.body.shortDescription.length > 100) {
+            errorsCollect(errors, "Error Type: Your short description should be less than 100", "shortDescription");
+        }
     }
-    if (!req.body.content) {
-        const error = {
-            message: "Error Type: You should specify the content",
-            field: "content"
-        };
-        errors.push(error);
+    // --------------------------------------- Проверка контента ---------------------------------------------------------
+    if (typeof req.body.content !== "string") {
+        errorsCollect(errors, "Error Type: Your content should be the string", "content");
     }
-    if (typeof req.body.content) {
-        const error = {
-            message: "Error Type: Your content should be the string",
-            field: "content"
-        };
-        errors.push(error);
+    else {
+        if (!req.body.content.trim()) {
+            errorsCollect(errors, "Error Type: You should specify the content", "content");
+        }
+        if (req.body.content.length > 1000) {
+            errorsCollect(errors, "Error Type: Your content should be less than 1000 symbols", "content");
+        }
     }
-    if (req.body.content.length > 1000) {
-        const error = {
-            message: "Error Type: Your content should be less than 1000 symbols",
-            field: "content"
-        };
-        errors.push(error);
-    }
+    // -------------------------------------- Проверка bloggerId ---------------------------------------------------------
     if (!req.body.bloggerId) {
-        const error = {
-            message: "Error Type: You should specify blogger Id",
-            field: "bloggerId"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error Type: You should specify blogger Id", "bloggerId");
     }
     if (typeof req.body.bloggerId !== "number") {
-        const error = {
-            message: "Error Type: Your blogger Id should be the number",
-            field: "bloggerId"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error Type: Your blogger Id should be the number", "bloggerId");
     }
-    if (errors.length !== 0 || !post) {
-        const responseObj = {
-            errorsMessages: errors,
-            resultCode: !post ? 400 : 404
-        };
-        res.send(responseObj);
+    if (errors.length !== 0) {
+        errorResponse(res, errors, 400);
     }
+    if (!post) {
+        errorsCollect(errors, "Error Type: Your id is out of range", "id");
+        errorResponse(res, errors, 404);
+    }
+    /*    if (errors.length !== 0 || !post) {
+            const responseObj: APIErrorResultType = {
+                errorsMessages: errors,
+                resultCode: !post ? 400 : 404
+            }
+            res.send(responseObj)
+        } */
     else {
         const body = req.body;
         post.title = body.title;
@@ -643,29 +566,25 @@ app.delete('/hs_01/api/posts/:id', (req, res) => {
     const id = parseInt(req.params.id);
     const post = posts.find(p => p.id === id);
     if (!id) {
-        const error = {
-            message: "Error Type: You should specify the Id",
-            field: "id"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error Type: You should specify the Id", "id");
     }
     if (!post) {
-        const error = {
-            message: "Error Type: Your Id is out of range",
-            field: "id"
-        };
-        errors.push(error);
+        errorsCollect(errors, "Error Type: Your Id is out of range", "id");
+        errorResponse(res, errors, 404);
     }
-    if (errors.length !== 0 || !post) {
-        const responseObj = {
-            errorsMessages: errors,
-            resultCode: !post ? 400 : 404
-        };
-        res.send(responseObj);
+    if (errors.length !== 0) {
+        errorResponse(res, errors, 400);
     }
+    /*    if (errors.length !== 0 || !post) {
+            const responseObj: APIErrorResultType = {
+                errorsMessages: errors,
+                resultCode: !post ? 400 : 404
+            }
+            res.send(responseObj)
+        } */
     else {
         posts = posts.filter(p => p.id !== id);
-        res.status(204);
+        res.send(204);
     }
 });
 app.listen(port, () => {

@@ -132,36 +132,36 @@ app.post('/hs_01/api/bloggers', (req: Request, res: Response) => {
         }
         // ------------ Проверка урла --------------------------------------
     }
-        //const test =  reg.test(req.body.youtubeUrl)
-        if (!reg.test(req.body.youtubeUrl)) {
-            errorsCollect(errors, "Error Type: your Url is empty or not valid", "youtubeUrl")
-        } else {
-            //console.log('else', req.body.youtubeUrl.length)
-            if (!req.body.youtubeUrl.trim()) {
-                errorsCollect(errors, "Error type: the field is empty", "youtubeUrl")
-            }
-            if (req.body.youtubeUrl.length > 100) {
-                //console.log('url err')
-                errorsCollect(errors, "Error type: the field should be less than 100 symbols", "youtubeUrl")
-            }
-            /*
-            * Если ошибка юзера - 201. result code 1, ты ошибся.
-            *
-            * */
+    //const test =  reg.test(req.body.youtubeUrl)
+    if (!reg.test(req.body.youtubeUrl)) {
+        errorsCollect(errors, "Error Type: your Url is empty or not valid", "youtubeUrl")
+    } else {
+        //console.log('else', req.body.youtubeUrl.length)
+        if (!req.body.youtubeUrl.trim()) {
+            errorsCollect(errors, "Error type: the field is empty", "youtubeUrl")
         }
-        if (errors.length !== 0) {
-            errorResponse(res, errors, 400)
-        } else {
-            const body: BloggerInputModelType = req.body
-            const newBlogger: BloggerViewModelType = {
-                id: getLastId(bloggers) + 1,
-                name: body.name,
-                youtubeUrl: body.youtubeUrl
-            }
-            bloggers.push(newBlogger)
-            res.status(201)
-            res.send(newBlogger)
+        if (req.body.youtubeUrl.length > 100) {
+            //console.log('url err')
+            errorsCollect(errors, "Error type: the field should be less than 100 symbols", "youtubeUrl")
         }
+        /*
+        * Если ошибка юзера - 201. result code 1, ты ошибся.
+        *
+        * */
+    }
+    if (errors.length !== 0) {
+        errorResponse(res, errors, 400)
+    } else {
+        const body: BloggerInputModelType = req.body
+        const newBlogger: BloggerViewModelType = {
+            id: getLastId(bloggers) + 1,
+            name: body.name,
+            youtubeUrl: body.youtubeUrl
+        }
+        bloggers.push(newBlogger)
+        res.status(201)
+        res.send(newBlogger)
+    }
 })
 
 app.get('/hs_01/api/bloggers/:id', (req: Request, res: Response) => {
@@ -179,13 +179,13 @@ app.get('/hs_01/api/bloggers/:id', (req: Request, res: Response) => {
         errorsCollect(errors, "Error type: You have no id", "id")
         res.send(400)
     }
-/*    if (Number.isNaN(id)) {
-        const error: FieldErrorType = {
-            message: "Error type: Your id is not a number",
-            field: "id"
-        }
-        errors.push(error)
-    }*/
+    /*    if (Number.isNaN(id)) {
+            const error: FieldErrorType = {
+                message: "Error type: Your id is not a number",
+                field: "id"
+            }
+            errors.push(error)
+        }*/
     if (!blogger) {
         errorsCollect(errors, "Error type: Your id is out of range", "id")
     }
@@ -225,24 +225,24 @@ app.put('/hs_01/api/bloggers/:id', (req: Request, res: Response) => {
     const blogger = bloggers.find(bl => bl.id === id)
     const reg = new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?")
     if (!id) {
-        errorsCollect(errors,"Error Type: You have no id", "id")
+        errorsCollect(errors, "Error Type: You have no id", "id")
     }
     console.log('id', id)
-/*    if (Number.isNaN(id)) {
-        const error: FieldErrorType = {
-            message: "Error Type: id is not a number",
-            field: "id"
-        }
-        errors.push(error)
-    }*/
+    /*    if (Number.isNaN(id)) {
+            const error: FieldErrorType = {
+                message: "Error Type: id is not a number",
+                field: "id"
+            }
+            errors.push(error)
+        }*/
 
 // ----------------------------------------- Проверка name ------------------------------------------------
     if (typeof req.body.name !== "string") {
-        errorsCollect(errors,"Error Type: Your name should be a string type", "name")
+        errorsCollect(errors, "Error Type: Your name should be a string type", "name")
     } else {
         if (!req.body.name.trim()) {
-            errorsCollect(errors, "Error Type: You should define your name","name")
-        },
+            errorsCollect(errors, "Error Type: You should define your name", "name")
+        }
         if (req.body.name.length > 15) {
             errorsCollect(errors, "Error Type: You should enter the name less than 15 symbols", "name")
         }
@@ -251,31 +251,38 @@ app.put('/hs_01/api/bloggers/:id', (req: Request, res: Response) => {
 // -------------------------------------- Проверка youtubeUrl --------------------------------------------
     if (typeof req.body.youtubeUrl !== "string") {
         errorsCollect(errors, "Error Type: Your link should be a string", "youtubeUrl")
+    } else {
+        if (!req.body.youtubeUrl) {
+            errorsCollect(errors, "Error Type: You should specify your link", "youtubeUrl")
+        }
+        console.log(req.body.youtubeUrl)
+        if (req.body.youtubeUrl.length > 100) {
+            errorsCollect(errors, "Error Type: Your link should be less than 100 symbols", "youtubeUrl")
+        }
+        if (!reg.test(req.body.youtubeUrl)) {
+            errorsCollect(errors, "Error Type: You should specify valid url", "youtubeUrl")
+        }
     }
-
-    if (!req.body.youtubeUrl) {
-        errorsCollect(errors, "Error Type: You should specify your link","youtubeUrl")
-    }
-    console.log(req.body.youtubeUrl)
-    if (req.body.youtubeUrl.length > 100) {
-        errorsCollect(errors, "Error Type: Your link should be less than 100 symbols", "youtubeUrl")
-    }
-
-    if (!reg.test(req.body.youtubeUrl)) {
-        errorsCollect(errors, "Error Type: You should specify valid url", "youtubeUrl")
+    if (errors.length !== 0) {
+        errorResponse(res, errors, 400)
     }
     if (!blogger) {
-        errorsCollect(errors,"Error Type: Your id is out of range","id")
+        errorsCollect(errors, "Error Type: Your id is out of range", "id")
+        errorResponse(res, errors, 404)
     }
-    if (errors.length !== 0 || !blogger) {
-        const responseObj: APIErrorResultType = {
-            errorsMessages: errors,
-            resultCode: blogger ? 400 : 404
-        }
-        res.send(responseObj)
-    } else {
+
+    /*    if (errors.length !== 0 || !blogger) {
+            const responseObj: APIErrorResultType = {
+                errorsMessages: errors,
+                resultCode: blogger ? 400 : 404
+            }
+            res.send(responseObj)
+        }*/
+
+    else {
         const body: BloggerInputModelType = req.body
-        blogger.name = body.name;
+        blogger.name = body.name
+        blogger.youtubeUrl = body.youtubeUrl
         res.send(204)
     }
 })
@@ -297,34 +304,32 @@ app.delete('/hs_01/api/bloggers/:id', (req: Request, res: Response) => {
     const id = parseInt(req.params.id)
     const blogger = bloggers.find(bl => bl.id === id)
     if (!id) {
-        const error: FieldErrorType = {
-            message: "Error Type: You should specify the id",
-            field: "id"
-        }
-        errors.push(error)
+        errorsCollect(errors, "Error Type: You should specify the id", "id")
     }
-    // Кмк, эта проверка не нужна, т.к. выше мы из айдишки делаем намбер.
-    if (Number.isNaN(req.params.id)) {
-        const error: FieldErrorType = {
-            message: "Error Type: Your id should be a number",
-            field: "id"
-        }
-        errors.push(error)
-    }
+    /*    // Кмк, эта проверка не нужна, т.к. выше мы из айдишки делаем намбер.
+        if (Number.isNaN(req.params.id)) {
+            const error: FieldErrorType = {
+                message: "Error Type: Your id should be a number",
+                field: "id"
+            }
+            errors.push(error)
+        }*/
     if (!blogger) {
-        const error: FieldErrorType = {
-            message: "Error Type: Your id is out of range",
-            field: "id"
-        }
-        errors.push(error)
+        errorsCollect(errors, "Error Type: Your id is out of range", "id")
+        errorResponse(res, errors, 404)
     }
-    if (errors.length !== 0 || !blogger) {
-        const responseObj: APIErrorResultType = {
-            errorsMessages: errors,
-            resultCode: !blogger ? 400 : 404
-        }
-        res.send(responseObj)
-    } else {
+    if (errors.length !== 0) {
+        errorResponse(res, errors, 400)
+    }
+    /*  if (errors.length !== 0 || !blogger) {
+          const responseObj: APIErrorResultType = {
+              errorsMessages: errors,
+              resultCode: !blogger ? 400 : 404
+          }
+          res.send(responseObj)
+      } */
+
+    else {
         bloggers = bloggers.filter(bl => bl.id === id)
         res.send(204)
     }
@@ -365,89 +370,51 @@ app.post('/hs_01/api/posts', (req: Request, res: Response) => {
     * БлогерНэйм -
     * */
     const errors: FieldErrorType[] = []
-    if (!req.body.title.trim()) {
-        const error: FieldErrorType = {
-            message: "Error Type: You should specify the title",
-            field: "title"
-        }
-        errors.push(error)
-    }
+// ------------------------------------------------ Проеврка тайтла ------------------------------------------------
     if (typeof req.body.title !== "string") {
-        const error: FieldErrorType = {
-            message: "Error Type: Your title should by type string",
-            field: "string"
+        errorsCollect(errors, "Error Type: Your title should by type string", "string")
+    } else {
+        if (!req.body.title.trim()) {
+            errorsCollect(errors, "Error Type: You should specify the title", "title")
         }
-        errors.push(error)
-    }
-    if (req.body.title.length > 30) {
-        const error: FieldErrorType = {
-            message: "Error Type: Your title should be less than 30 symbols",
-            field: "title"
+
+        if (req.body.title.length > 30) {
+            errorsCollect(errors, "Error Type: Your title should be less than 30 symbols", "title")
         }
-        errors.push(error)
     }
-    if (!req.body.shortDescription.trim()) {
-        const error: FieldErrorType = {
-            message: "Error Type: You should specify the short description",
-            field: "shortDescription"
-        }
-        errors.push(error)
-    }
+// ---------------------------------------- Проверка короткого описания ---------------------------------------------
     if (typeof req.body.shortDescription !== "string") {
-        const error: FieldErrorType = {
-            message: "Error Type: Your input should be the string type",
-            field: "shortDescription"
+        errorsCollect(errors, "Error Type: Your input should be the string type", "shortDescription")
+    } else {
+        if (!req.body.shortDescription.trim()) {
+            errorsCollect(errors, "Error Type: You should specify the short description", "shortDescription")
         }
-        errors.push(error)
-    }
-    if (req.body.shortDescription.length > 100) {
-        const error: FieldErrorType = {
-            message: "Error Type: You should enter less than 100 symobls",
-            field: "shortDescription"
+
+        if (req.body.shortDescription.length > 100) {
+            errorsCollect(errors, "Error Type: You should enter less than 100 symobls", "shortDescription")
         }
-        errors.push(error)
     }
-    if (!req.body.content) {
-        const error: FieldErrorType = {
-            message: "Error Type: Your content is empty",
-            field: "content"
-        }
-        errors.push(error)
-    }
+// ------------------------------------------- Проверка контента -----------------------------------------------------
     if (typeof req.body.content !== "string") {
-        const error: FieldErrorType = {
-            message: "Error Type: Your content should be type string",
-            field: "content"
+        errorsCollect(errors, "Error Type: Your content should be type string", "content")
+    } else {
+        if (!req.body.content.trim()) {
+            errorsCollect(errors, "Error Type: Your content is empty", "content")
         }
-        errors.push(error)
+        if (req.body.content.length > 1000) {
+            errorsCollect(errors, "Error Type: Your content should be less than 1000 symbols", "content")
+        }
     }
+// ------------------------------------------ Проверка BloggerId ------------------------------------------------------
+
     if (!req.body.bloggerId) {
-        const error: FieldErrorType = {
-            message: "Error Type: You have empty id",
-            field: "bloggerId"
-        }
-        errors.push(error)
+        errorsCollect(errors, "Error Type: You have empty id", "bloggerId")
     }
     if (typeof req.body.bloggerId !== "number") {
-        const error: FieldErrorType = {
-            message: "Error Type: You should enter a number",
-            field: "bloggerId"
-        }
-        errors.push(error)
-    }
-    if (req.body.content.length > 1000) {
-        const error: FieldErrorType = {
-            message: "Error Type: Your content should be less than 1000 symbols",
-            field: "content"
-        }
-        errors.push(error)
+        errorsCollect(errors, "Error Type: You should enter a number", "bloggerId")
     }
     if (errors.length !== 0) {
-        const responseObj: APIErrorResultType = {
-            errorsMessages: errors,
-            resultCode: 404
-        }
-        res.send(responseObj)
+        errorResponse(res, errors, 400)
     } else {
         const body: PostInputModelType = req.body
         const post: PostViewModelType = {
@@ -479,26 +446,23 @@ app.get('/hs_01/api/posts/:id', (req: Request, res: Response) => {
     const id = parseInt(req.params.id)
     const post = posts.find(p => p.id === id)
     if (!id) {
-        const error: FieldErrorType = {
-            message: "Error Type: You should specify some id",
-            field: "id"
-        }
-        errors.push(error)
+        errorsCollect(errors, "Error Type: You should specify some id", "id")
     }
     if (!post) {
-        const error: FieldErrorType = {
-            message: "Error Type: Your id is out of range",
-            field: "id"
-        }
-        errors.push(error)
+        errorsCollect(errors, "Error Type: Your id is out of range", "id")
+        errorResponse(res, errors, 404)
     }
-    if (errors.length !== 0 || !post) {
-        const responseObj: APIErrorResultType = {
-            errorsMessages: errors,
-            resultCode: 404
-        }
-        res.send(responseObj)
-    } else {
+    if (errors.length !== 0) {
+        errorResponse(res, errors, 400)
+    }
+    /*    if (errors.length !== 0 || !post) {
+            const responseObj: APIErrorResultType = {
+                errorsMessages: errors,
+                resultCode: 404
+            }
+            res.send(responseObj)
+        } */
+    else {
         res.status(200).send(post)
     }
 })
@@ -534,103 +498,63 @@ app.put('/hs_01/api/posts/:id', (req: Request, res: Response) => {
     const id = parseInt(req.params.id)
     const post = posts.find(p => p.id === id)
     if (!id) {
-        const error: FieldErrorType = {
-            message: "Error Type: You should specify the id",
-            field: "id"
-        }
-        errors.push(error)
+        errorsCollect(errors, "Error Type: You should specify the id", "id")
     }
-    if (!post) {
-        const error: FieldErrorType = {
-            message: "Error Type: Your id is out of range",
-            field: "id"
-        }
-        errors.push(error)
-    }
-    if (!req.body.title) {
-        const error: FieldErrorType = {
-            message: "Error Type: Your should specify the title",
-            field: "title"
-        }
-        errors.push(error)
-    }
+// --------------------------------- Проверка тайтла ---------------------------------------------------------------
     if (typeof req.body.title !== "string") {
-        const error: FieldErrorType = {
-            message: "Error Type: Your title should be string type",
-            field: "title"
+        errorsCollect(errors, "Error Type: Your title should be string type", "title")
+    } else {
+        if (!req.body.title.trim()) {
+            errorsCollect(errors, "Error Type: Your should specify the title", "title")
         }
-        errors.push(error)
-    }
-    if (req.body.title.length > 30) {
-        const error: FieldErrorType = {
-            message: "Error Type: Your title should be less than 30 symbols",
-            field: "title"
+        if (req.body.title.length > 30) {
+            errorsCollect(errors, "Error Type: Your title should be less than 30 symbols", "title")
         }
-        errors.push(error)
     }
-    if (!req.body.shortDescription) {
-        const error: FieldErrorType = {
-            message: "Error Type: You should specify the short descripiton",
-            field: "shortDescription"
-        }
-        errors.push(error)
-    }
+// --------------------------------- Проверка короткого описания ----------------------------------------------------
     if (typeof req.body.shortDescription !== "string") {
-        const error: FieldErrorType = {
-            message: "Error Type: your short description should be string type",
-            field: "shortDescription"
+        errorsCollect(errors, "Error Type: your short description should be string type", "shortDescription")
+    } else {
+        if (!req.body.shortDescription.trim()) {
+            errorsCollect(errors, "Error Type: You should specify the short descripiton", "shortDescription")
         }
-        errors.push(error)
-    }
-    if (req.body.shortDescription.length > 100) {
-        const error: FieldErrorType = {
-            message: "Error Type: Your short description should be less than 100",
-            field: "shortDescription"
+        if (req.body.shortDescription.length > 100) {
+            errorsCollect(errors, "Error Type: Your short description should be less than 100", "shortDescription")
         }
-        errors.push(error)
     }
-    if (!req.body.content) {
-        const error: FieldErrorType = {
-            message: "Error Type: You should specify the content",
-            field: "content"
+// --------------------------------------- Проверка контента ---------------------------------------------------------
+    if (typeof req.body.content !== "string") {
+        errorsCollect(errors, "Error Type: Your content should be the string", "content")
+    } else {
+        if (!req.body.content.trim()) {
+            errorsCollect(errors, "Error Type: You should specify the content", "content")
         }
-        errors.push(error)
-    }
-    if (typeof req.body.content) {
-        const error: FieldErrorType = {
-            message: "Error Type: Your content should be the string",
-            field: "content"
+        if (req.body.content.length > 1000) {
+            errorsCollect(errors, "Error Type: Your content should be less than 1000 symbols", "content")
         }
-        errors.push(error)
     }
-    if (req.body.content.length > 1000) {
-        const error: FieldErrorType = {
-            message: "Error Type: Your content should be less than 1000 symbols",
-            field: "content"
-        }
-        errors.push(error)
-    }
+// -------------------------------------- Проверка bloggerId ---------------------------------------------------------
     if (!req.body.bloggerId) {
-        const error: FieldErrorType = {
-            message: "Error Type: You should specify blogger Id",
-            field: "bloggerId"
-        }
-        errors.push(error)
+        errorsCollect(errors, "Error Type: You should specify blogger Id", "bloggerId")
     }
     if (typeof req.body.bloggerId !== "number") {
-        const error: FieldErrorType = {
-            message: "Error Type: Your blogger Id should be the number",
-            field: "bloggerId"
-        }
-        errors.push(error)
+        errorsCollect(errors, "Error Type: Your blogger Id should be the number", "bloggerId")
     }
-    if (errors.length !== 0 || !post) {
-        const responseObj: APIErrorResultType = {
-            errorsMessages: errors,
-            resultCode: !post ? 400 : 404
-        }
-        res.send(responseObj)
-    } else {
+    if (errors.length !== 0) {
+        errorResponse(res, errors, 400)
+    }
+    if (!post) {
+        errorsCollect(errors, "Error Type: Your id is out of range", "id")
+        errorResponse(res, errors, 404)
+    }
+    /*    if (errors.length !== 0 || !post) {
+            const responseObj: APIErrorResultType = {
+                errorsMessages: errors,
+                resultCode: !post ? 400 : 404
+            }
+            res.send(responseObj)
+        } */
+    else {
         const body: PostInputModelType = req.body
         post.title = body.title;
         post.shortDescription = body.shortDescription;
@@ -655,28 +579,25 @@ app.delete('/hs_01/api/posts/:id', (req: Request, res: Response) => {
     const id = parseInt(req.params.id)
     const post = posts.find(p => p.id === id)
     if (!id) {
-        const error: FieldErrorType = {
-            message: "Error Type: You should specify the Id",
-            field: "id"
-        }
-        errors.push(error)
+        errorsCollect(errors, "Error Type: You should specify the Id", "id")
     }
     if (!post) {
-        const error: FieldErrorType = {
-            message: "Error Type: Your Id is out of range",
-            field: "id"
-        }
-        errors.push(error)
+        errorsCollect(errors, "Error Type: Your Id is out of range", "id")
+        errorResponse(res, errors, 404)
     }
-    if (errors.length !== 0 || !post) {
+    if (errors.length !== 0) {
+        errorResponse(res, errors, 400)
+    }
+/*    if (errors.length !== 0 || !post) {
         const responseObj: APIErrorResultType = {
             errorsMessages: errors,
             resultCode: !post ? 400 : 404
         }
         res.send(responseObj)
-    } else {
+    } */
+    else {
         posts = posts.filter(p => p.id !== id)
-        res.status(204)
+        res.send(204)
     }
 
 })
