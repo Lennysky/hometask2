@@ -193,7 +193,7 @@ app.get('/bloggers/:id', (req: Request, res: Response) => {
         errorResponse(res, errors, 404)
     } else {
         const blogger = bloggers.find(bl => bl.id === id)
-        res.status(201)
+        res.status(200)
         res.send(blogger)
     }
 })
