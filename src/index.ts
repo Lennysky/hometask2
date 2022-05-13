@@ -315,7 +315,7 @@ app.delete('/bloggers/:id', (req: Request, res: Response) => {
             errors.push(error)
         }*/
     if (!blogger) {
-        errorsCollect(errors, "Error Type: Your id is out of range", "id")
+       // errorsCollect(errors, "Error Type: Your id is out of range", "id")
         errorResponse(res, errors, 404)
     }
     if (errors.length !== 0) {
@@ -582,7 +582,7 @@ app.delete('/posts/:id', (req: Request, res: Response) => {
         errorsCollect(errors, "Error Type: You should specify the Id", "id")
     }
     if (!post) {
-        errorsCollect(errors, "Error Type: Your Id is out of range", "id")
+       // errorsCollect(errors, "Error Type: Your Id is out of range", "id")
         errorResponse(res, errors, 404)
     }
     if (errors.length !== 0) {
