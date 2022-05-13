@@ -86,7 +86,7 @@ app.get('/', (req, res) => {
     res.send('ping');
 });
 app.get('/bloggers', (req, res) => {
-    res.send(bloggers);
+    res.status(200).send(bloggers);
 });
 app.post('/bloggers', (req, res) => {
     /*
@@ -323,7 +323,7 @@ app.delete('/bloggers/:id', (req, res) => {
     }
 });
 app.get('/posts', (req, res) => {
-    res.send(posts);
+    res.status(200).send(posts);
 });
 app.post('/hs_01/api/posts', (req, res) => {
     /*

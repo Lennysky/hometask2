@@ -94,7 +94,7 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 app.get('/bloggers', (req: Request, res: Response) => {
-    res.send(bloggers)
+    res.status(200).send(bloggers)
 })
 
 app.post('/bloggers', (req: Request, res: Response) => {
@@ -336,7 +336,7 @@ app.delete('/bloggers/:id', (req: Request, res: Response) => {
 })
 
 app.get('/posts', (req: Request, res: Response) => {
-    res.send(posts)
+    res.status(200).send(posts)
 })
 
 app.post('/hs_01/api/posts', (req: Request, res: Response) => {
