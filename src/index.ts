@@ -85,7 +85,7 @@ const errorResponse = (res: Response, errorsMessages: FieldErrorType[], resultCo
         errorsMessages: errorsMessages,
         resultCode: resultCode
     }
-    res.status(resultCode).send(responseObj)
+    res.status(400).send(responseObj)
 }
 
 
@@ -93,11 +93,11 @@ app.get('/', (req: Request, res: Response) => {
     res.send('ping')
 })
 
-app.get('/hs_01/api/bloggers', (req: Request, res: Response) => {
+app.get('/bloggers', (req: Request, res: Response) => {
     res.send(bloggers)
 })
 
-app.post('/hs_01/api/bloggers', (req: Request, res: Response) => {
+app.post('/bloggers', (req: Request, res: Response) => {
     /*
     * В теле реквеста передаю req.body.name, req.body.youtubeUrl.
     * В ф-ции нужно сгенерить id, либо найти последний id.
@@ -150,7 +150,7 @@ app.post('/hs_01/api/bloggers', (req: Request, res: Response) => {
         * */
     }
     if (errors.length !== 0) {
-        errorResponse(res, errors, 400)
+        errorResponse(res, errors, 1)
     } else {
         const body: BloggerInputModelType = req.body
         const newBlogger: BloggerViewModelType = {
@@ -164,7 +164,7 @@ app.post('/hs_01/api/bloggers', (req: Request, res: Response) => {
     }
 })
 
-app.get('/hs_01/api/bloggers/:id', (req: Request, res: Response) => {
+app.get('/bloggers/:id', (req: Request, res: Response) => {
     /*
     * id вытаскиваем из параметров.
     * Ищем в массиве по айдишке то видео, которое равно айдишке.
@@ -198,7 +198,7 @@ app.get('/hs_01/api/bloggers/:id', (req: Request, res: Response) => {
     }
 })
 
-app.put('/hs_01/api/bloggers/:id', (req: Request, res: Response) => {
+app.put('/bloggers/:id', (req: Request, res: Response) => {
     /*
     * Найти по айдишнику блогера в массиве.
     * Запушить обновленные данные в найденный объект.
@@ -264,7 +264,7 @@ app.put('/hs_01/api/bloggers/:id', (req: Request, res: Response) => {
         }
     }
     if (errors.length !== 0) {
-        errorResponse(res, errors, 400)
+        errorResponse(res, errors, 1)
     }
     if (!blogger) {
         errorsCollect(errors, "Error Type: Your id is out of range", "id")
@@ -287,7 +287,7 @@ app.put('/hs_01/api/bloggers/:id', (req: Request, res: Response) => {
     }
 })
 
-app.delete('/hs_01/api/bloggers/:id', (req: Request, res: Response) => {
+app.delete('/bloggers/:id', (req: Request, res: Response) => {
     /*
     * Создать переменную для массива ошибок.
     * Создать переменную блогера, в которую запихнуть поиск блогера по айдишке.
@@ -335,7 +335,7 @@ app.delete('/hs_01/api/bloggers/:id', (req: Request, res: Response) => {
     }
 })
 
-app.get('/hs_01/api/posts', (req: Request, res: Response) => {
+app.get('/posts', (req: Request, res: Response) => {
     res.send(posts)
 })
 
@@ -414,7 +414,7 @@ app.post('/hs_01/api/posts', (req: Request, res: Response) => {
         errorsCollect(errors, "Error Type: You should enter a number", "bloggerId")
     }
     if (errors.length !== 0) {
-        errorResponse(res, errors, 400)
+        errorResponse(res, errors, 1)
     } else {
         const body: PostInputModelType = req.body
         const post: PostViewModelType = {
@@ -429,7 +429,7 @@ app.post('/hs_01/api/posts', (req: Request, res: Response) => {
     }
 })
 
-app.get('/hs_01/api/posts/:id', (req: Request, res: Response) => {
+app.get('/posts/:id', (req: Request, res: Response) => {
     /*
     * Сделать массив для ошибок.
     * Объявить айдишку, присвоить ей значение из реквест.айди, сделать намбером.
@@ -467,7 +467,7 @@ app.get('/hs_01/api/posts/:id', (req: Request, res: Response) => {
     }
 })
 
-app.put('/hs_01/api/posts/:id', (req: Request, res: Response) => {
+app.put('/posts/:id', (req: Request, res: Response) => {
     /*
     * Создать массив с ошибками.
     * Айдишник сделать намбером.
@@ -541,7 +541,7 @@ app.put('/hs_01/api/posts/:id', (req: Request, res: Response) => {
         errorsCollect(errors, "Error Type: Your blogger Id should be the number", "bloggerId")
     }
     if (errors.length !== 0) {
-        errorResponse(res, errors, 400)
+        errorResponse(res, errors, 1)
     }
     if (!post) {
         errorsCollect(errors, "Error Type: Your id is out of range", "id")
@@ -564,7 +564,7 @@ app.put('/hs_01/api/posts/:id', (req: Request, res: Response) => {
     }
 })
 
-app.delete('/hs_01/api/posts/:id', (req: Request, res: Response) => {
+app.delete('/posts/:id', (req: Request, res: Response) => {
     /*
     * Сделать массив для ошибок.
     * Сделать айдишку, сделать ее намбером.
