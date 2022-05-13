@@ -331,7 +331,7 @@ app.delete('/bloggers/:id', (req: Request, res: Response) => {
 
     else {
         bloggers = bloggers.filter(bl => bl.id === id)
-        res.status(204)
+        res.status(204).send()
     }
 })
 
@@ -597,7 +597,7 @@ app.delete('/posts/:id', (req: Request, res: Response) => {
     } */
     else {
         posts = posts.filter(p => p.id !== id)
-        res.send(204)
+        res.status(204).send()
     }
 
 })

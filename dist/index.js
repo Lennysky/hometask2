@@ -319,7 +319,7 @@ app.delete('/bloggers/:id', (req, res) => {
       } */
     else {
         bloggers = bloggers.filter(bl => bl.id === id);
-        res.status(204);
+        res.status(204).send();
     }
 });
 app.get('/posts', (req, res) => {
@@ -584,7 +584,7 @@ app.delete('/posts/:id', (req, res) => {
         } */
     else {
         posts = posts.filter(p => p.id !== id);
-        res.send(204);
+        res.status(204).send();
     }
 });
 app.listen(port, () => {
