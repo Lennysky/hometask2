@@ -339,7 +339,7 @@ app.get('/posts', (req: Request, res: Response) => {
     res.status(200).send(posts)
 })
 
-app.post('/hs_01/api/posts', (req: Request, res: Response) => {
+app.post('/posts', (req: Request, res: Response) => {
     /*
     * Создать массив для ошибок.
     * Заюзать самодельную ф-цию поиска последнего элемента.

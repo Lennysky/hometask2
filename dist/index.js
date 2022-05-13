@@ -325,7 +325,7 @@ app.delete('/bloggers/:id', (req, res) => {
 app.get('/posts', (req, res) => {
     res.status(200).send(posts);
 });
-app.post('/hs_01/api/posts', (req, res) => {
+app.post('/posts', (req, res) => {
     /*
     * Создать массив для ошибок.
     * Заюзать самодельную ф-цию поиска последнего элемента.
