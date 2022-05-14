@@ -142,7 +142,7 @@ app.post('/bloggers', (req, res) => {
         * */
     }
     if (errors.length !== 0) {
-        errorResponse(res, errors, 1);
+        errorResponse(res, errors, 400);
     }
     else {
         const body = req.body;
@@ -258,7 +258,7 @@ app.put('/bloggers/:id', (req, res) => {
         }
     }
     if (errors.length !== 0) {
-        errorResponse(res, errors, 1);
+        errorResponse(res, errors, 400);
     }
     if (!blogger) {
         errorsCollect(errors, "Error Type: Your id is out of range", "id");
@@ -416,7 +416,7 @@ app.post('/posts', (req, res) => {
             bloggerName: "Ask why in postInput is not specified at swagger"
         };
         posts.push(post);
-        res.send(post);
+        res.status(201).send(post);
     }
 });
 app.get('/posts/:id', (req, res) => {
@@ -535,7 +535,7 @@ app.put('/posts/:id', (req, res) => {
         errorsCollect(errors, "Error Type: Your blogger Id should be the number", "bloggerId");
     }
     if (errors.length !== 0) {
-        errorResponse(res, errors, 1);
+        errorResponse(res, errors, 400);
     }
     if (!post) {
         errorsCollect(errors, "Error Type: Your id is out of range", "id");
