@@ -144,11 +144,10 @@ app.post('/bloggers', (req, res) => {
         errorResponse(res, errors, 1);
     }
     else {
-        //const body: BloggerInputModelType = req.body
         const body = req.body;
         const newBlogger = {
-            //id: getLastId(bloggers) + 1,
-            id: body.id,
+            id: getLastId(bloggers) + 1,
+            //id: +(new Date()),
             name: body.name,
             youtubeUrl: body.youtubeUrl
         };
