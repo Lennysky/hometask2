@@ -361,7 +361,7 @@ app.post('/posts', (req, res) => {
     const errors = [];
     // ------------------------------------------------ Проеврка тайтла ------------------------------------------------
     if (typeof req.body.title !== "string") {
-        errorsCollect(errors, "Error Type: Your title should by type string", "string");
+        errorsCollect(errors, "Error Type: Your title should by type string", "title");
     }
     else {
         if (!req.body.title.trim()) {

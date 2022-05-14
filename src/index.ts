@@ -375,7 +375,7 @@ app.post('/posts', (req: Request, res: Response) => {
     const errors: FieldErrorType[] = []
 // ------------------------------------------------ Проеврка тайтла ------------------------------------------------
     if (typeof req.body.title !== "string") {
-        errorsCollect(errors, "Error Type: Your title should by type string", "string")
+        errorsCollect(errors, "Error Type: Your title should by type string", "title")
     } else {
         if (!req.body.title.trim()) {
             errorsCollect(errors, "Error Type: You should specify the title", "title")
