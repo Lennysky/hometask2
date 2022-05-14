@@ -331,7 +331,7 @@ app.delete('/bloggers/:id', (req: Request, res: Response) => {
       } */
 
     else {
-        bloggers = bloggers.filter(bl => bl.id === id)
+        bloggers = bloggers.filter(bl => bl.id !== id)
         res.status(204).send()
     }
 })

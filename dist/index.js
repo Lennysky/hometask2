@@ -319,7 +319,7 @@ app.delete('/bloggers/:id', (req, res) => {
           res.send(responseObj)
       } */
     else {
-        bloggers = bloggers.filter(bl => bl.id === id);
+        bloggers = bloggers.filter(bl => bl.id !== id);
         res.status(204).send();
     }
 });
