@@ -98,6 +98,7 @@ app.get('/bloggers', (req: Request, res: Response) => {
 })
 
 app.post('/bloggers', (req: Request, res: Response) => {
+    console.log(req.body, 'add blogger')
     /*
     * В теле реквеста передаю req.body.name, req.body.youtubeUrl.
     * В ф-ции нужно сгенерить id, либо найти последний id.
@@ -341,6 +342,7 @@ app.get('/posts', (req: Request, res: Response) => {
 })
 
 app.post('/posts', (req: Request, res: Response) => {
+    console.log(req.body, 'add post')
     /*
     * Создать массив для ошибок.
     * Заюзать самодельную ф-цию поиска последнего элемента.
@@ -431,6 +433,7 @@ app.post('/posts', (req: Request, res: Response) => {
 })
 
 app.get('/posts/:id', (req: Request, res: Response) => {
+    console.log(req.params, 'get post')
     /*
     * Сделать массив для ошибок.
     * Объявить айдишку, присвоить ей значение из реквест.айди, сделать намбером.
@@ -452,6 +455,7 @@ app.get('/posts/:id', (req: Request, res: Response) => {
     if (!post) {
         errorsCollect(errors, "Error Type: Your id is out of range", "id")
         errorResponse(res, errors, 404)
+        return
     }
     if (errors.length !== 0) {
         errorResponse(res, errors, 400)
