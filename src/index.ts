@@ -417,7 +417,7 @@ app.post('/posts', (req: Request, res: Response) => {
         errorsCollect(errors, "Error Type: You should enter a number", "bloggerId")
     }
     if (errors.length !== 0) {
-        errorResponse(res, errors, 1)
+        errorResponse(res, errors, 400)
     } else {
         const body: PostInputModelType = req.body
         const post: PostViewModelType = {
