@@ -22,11 +22,11 @@ app.use(jsonBodyMiddleware)
 const port = process.env.PORT || 5001
 
 let bloggers: BloggerViewModelType[] = [
-    {id: 1, name: "Dimych", youtubeUrl: "https://www.youtube.com/c/ITKAMASUTRA/videos"},
+    /*{id: 1, name: "Dimych", youtubeUrl: "https://www.youtube.com/c/ITKAMASUTRA/videos"},
     {id: 2, name: "Lenko", youtubeUrl: "https://www.youtube.com/channel/UCkgXcNSMktRtfMiv64Pxo5g/videos"},
     {id: 3, name: "Humberman", youtubeUrl: "https://www.youtube.com/c/AndrewHubermanLab/videos"},
     {id: 4, name: "Goblin", youtubeUrl: "https://www.youtube.com/c/DmitryPuchkov/videos"},
-    {id: 5, name: "Yamshchikov", youtubeUrl: "https://www.youtube.com/channel/UCQMteJvING2dzFIFbBYdipw/videos"}
+    {id: 5, name: "Yamshchikov", youtubeUrl: "https://www.youtube.com/channel/UCQMteJvING2dzFIFbBYdipw/videos"}*/
 ]
 
 let posts: PostViewModelType[] = [
@@ -192,7 +192,7 @@ app.get('/bloggers/:id', (req: Request, res: Response) => {
     if (errors.length !== 0) {
         errorResponse(res, errors, 404)
     } else {
-        const blogger = bloggers.find(bl => bl.id === id)
+        //const blogger = bloggers.find(bl => bl.id === id)
         res.status(200)
         res.send(blogger)
     }
