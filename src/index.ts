@@ -80,12 +80,12 @@ const errorsCollect = (errors: FieldErrorType[], message: string, field: string)
     errors.push(error)
 }
 
-const errorResponse = (res: Response, errorsMessages: FieldErrorType[], resultCode: number) => {
+const errorResponse = (res: Response, errorsMessages: FieldErrorType[], status: number) => {
     const responseObj: APIErrorResultType = {
         errorsMessages: errorsMessages,
-        resultCode: resultCode
+        resultCode: 1
     }
-    res.status(400).send(responseObj)
+    res.status(status).send(responseObj)
 }
 
 

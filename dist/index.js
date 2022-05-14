@@ -75,12 +75,12 @@ const errorsCollect = (errors, message, field) => {
     };
     errors.push(error);
 };
-const errorResponse = (res, errorsMessages, resultCode) => {
+const errorResponse = (res, errorsMessages, status) => {
     const responseObj = {
         errorsMessages: errorsMessages,
-        resultCode: resultCode
+        resultCode: 1
     };
-    res.status(400).send(responseObj);
+    res.status(status).send(responseObj);
 };
 app.get('/', (req, res) => {
     res.send('ping');
