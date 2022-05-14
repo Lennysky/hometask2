@@ -415,6 +415,7 @@ app.post('/posts', (req, res) => {
             bloggerId: body.bloggerId,
             bloggerName: "Ask why in postInput is not specified at swagger"
         };
+        posts.push(post);
         res.send(post);
     }
 });
