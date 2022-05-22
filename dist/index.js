@@ -20,11 +20,11 @@ app.use(jsonBodyMiddleware);
 // app.use(bodyParser.json()) - в оригинале
 const port = process.env.PORT || 5001;
 let bloggers = [
-/*{id: 1, name: "Dimych", youtubeUrl: "https://www.youtube.com/c/ITKAMASUTRA/videos"},
-{id: 2, name: "Lenko", youtubeUrl: "https://www.youtube.com/channel/UCkgXcNSMktRtfMiv64Pxo5g/videos"},
-{id: 3, name: "Humberman", youtubeUrl: "https://www.youtube.com/c/AndrewHubermanLab/videos"},
-{id: 4, name: "Goblin", youtubeUrl: "https://www.youtube.com/c/DmitryPuchkov/videos"},
-{id: 5, name: "Yamshchikov", youtubeUrl: "https://www.youtube.com/channel/UCQMteJvING2dzFIFbBYdipw/videos"}*/
+    { id: 1, name: "Dimych", youtubeUrl: "https://www.youtube.com/c/ITKAMASUTRA/videos" },
+    { id: 2, name: "Lenko", youtubeUrl: "https://www.youtube.com/channel/UCkgXcNSMktRtfMiv64Pxo5g/videos" },
+    { id: 3, name: "Humberman", youtubeUrl: "https://www.youtube.com/c/AndrewHubermanLab/videos" },
+    { id: 4, name: "Goblin", youtubeUrl: "https://www.youtube.com/c/DmitryPuchkov/videos" },
+    { id: 5, name: "Yamshchikov", youtubeUrl: "https://www.youtube.com/channel/UCQMteJvING2dzFIFbBYdipw/videos" }
 ];
 let posts = [
     {
@@ -218,12 +218,12 @@ app.put('/bloggers/:id', (req, res) => {
     const id = parseInt(req.params.id);
     const blogger = bloggers.find(bl => bl.id === id);
     const reg = new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?");
-    if (!id) {
-        //errorResponse(res, errors, 404)
-        res.sendStatus(404);
-        return;
-    }
-    console.log('id', id);
+    /* if (!id) {
+         //errorResponse(res, errors, 404)
+         res.status(404).send()
+         return
+     }
+     console.log('id', id)*/
     /*    if (Number.isNaN(id)) {
             const error: FieldErrorType = {
                 message: "Error Type: id is not a number",
@@ -231,14 +231,10 @@ app.put('/bloggers/:id', (req, res) => {
             }
             errors.push(error)
         }*/
-    if (!blogger) {
-        res.sendStatus(404);
-        // errorResponse(res, errors, 404)
-        return;
-    }
     // ----------------------------------------- Проверка name ------------------------------------------------
     if (typeof req.body.name !== "string") {
         errorsCollect(errors, "Error Type: Your name should be a string type", "name");
+        console.log('id', id);
     }
     else {
         if (!req.body.name.trim()) {
@@ -263,6 +259,7 @@ app.put('/bloggers/:id', (req, res) => {
         console.log(req.body.youtubeUrl);
         if (req.body.youtubeUrl.length > 100) {
             errorsCollect(errors, "Error Type: Your link should be less than 100 symbols", "youtubeUrl");
+            return;
         }
         if (!reg.test(req.body.youtubeUrl)) {
             errorsCollect(errors, "Error Type: You should specify valid url", "youtubeUrl");
@@ -271,6 +268,10 @@ app.put('/bloggers/:id', (req, res) => {
     }
     if (errors.length !== 0) {
         errorResponse(res, errors, 400);
+    }
+    if (!blogger) {
+        res.status(404).send();
+        // errorResponse(res, errors, 404)
     }
     /*    if (errors.length !== 0 || !blogger) {
             const responseObj: APIErrorResultType = {
@@ -283,7 +284,7 @@ app.put('/bloggers/:id', (req, res) => {
         const body = req.body;
         blogger.name = body.name;
         blogger.youtubeUrl = body.youtubeUrl;
-        res.send(204);
+        res.status(204).send();
     }
 });
 app.delete('/bloggers/:id', (req, res) => {
