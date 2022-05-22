@@ -219,7 +219,8 @@ app.put('/bloggers/:id', (req, res) => {
     const blogger = bloggers.find(bl => bl.id === id);
     const reg = new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?");
     if (!id) {
-        errorResponse(res, errors, 404);
+        //errorResponse(res, errors, 404)
+        res.sendStatus(404);
         return;
     }
     console.log('id', id);
@@ -231,7 +232,8 @@ app.put('/bloggers/:id', (req, res) => {
             errors.push(error)
         }*/
     if (!blogger) {
-        errorResponse(res, errors, 404);
+        res.sendStatus(404);
+        // errorResponse(res, errors, 404)
         return;
     }
     // ----------------------------------------- Проверка name ------------------------------------------------
