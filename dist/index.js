@@ -113,28 +113,34 @@ app.post('/bloggers', (req, res) => {
     if (typeof req.body.name !== "string") {
         console.log(req.body.name);
         errorsCollect(errors, "Error Type: Name should be the string", "name");
+        return;
     }
     else {
         if (!req.body.name.trim()) {
             errorsCollect(errors, "Error Type: the field is empty", "name");
+            return;
         }
         if (req.body.name.length > 15) {
             errorsCollect(errors, "Error Type: Yor name should be less than 15 symbols", "name");
+            return;
         }
         // ------------ Проверка урла --------------------------------------
     }
     //const test =  reg.test(req.body.youtubeUrl)
     if (!reg.test(req.body.youtubeUrl)) {
         errorsCollect(errors, "Error Type: your Url is empty or not valid", "youtubeUrl");
+        return;
     }
     else {
         //console.log('else', req.body.youtubeUrl.length)
         if (!req.body.youtubeUrl.trim()) {
             errorsCollect(errors, "Error type: the field is empty", "youtubeUrl");
+            return;
         }
         if (req.body.youtubeUrl.length > 100) {
             //console.log('url err')
             errorsCollect(errors, "Error type: the field should be less than 100 symbols", "youtubeUrl");
+            return;
         }
         /*
         * Если ошибка юзера - 201. result code 1, ты ошибся.
@@ -171,6 +177,7 @@ app.get('/bloggers/:id', (req, res) => {
     if (!id) {
         errorsCollect(errors, "Error type: You have no id", "id");
         res.send(400);
+        return;
     }
     /*    if (Number.isNaN(id)) {
             const error: FieldErrorType = {
@@ -181,6 +188,7 @@ app.get('/bloggers/:id', (req, res) => {
         }*/
     if (!blogger) {
         errorsCollect(errors, "Error type: Your id is out of range", "id");
+        return;
     }
     if (errors.length !== 0) {
         errorResponse(res, errors, 404);
@@ -219,6 +227,7 @@ app.put('/bloggers/:id', (req, res) => {
     const reg = new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?");
     if (!id) {
         errorsCollect(errors, "Error Type: You have no id", "id");
+        return;
     }
     console.log('id', id);
     /*    if (Number.isNaN(id)) {
@@ -228,30 +237,41 @@ app.put('/bloggers/:id', (req, res) => {
             }
             errors.push(error)
         }*/
+    if (!blogger) {
+        errorsCollect(errors, "Error Type: Your id is out of range", "id");
+        errorResponse(res, errors, 404);
+        return;
+    }
     // ----------------------------------------- Проверка name ------------------------------------------------
     if (typeof req.body.name !== "string") {
         errorsCollect(errors, "Error Type: Your name should be a string type", "name");
+        return;
     }
     else {
         if (!req.body.name.trim()) {
             errorsCollect(errors, "Error Type: You should define your name", "name");
+            return;
         }
         if (req.body.name.length > 15) {
             errorsCollect(errors, "Error Type: You should enter the name less than 15 symbols", "name");
+            return;
         }
     }
     //    console.log(req.body.youtubeUrl)
     // -------------------------------------- Проверка youtubeUrl --------------------------------------------
     if (typeof req.body.youtubeUrl !== "string") {
         errorsCollect(errors, "Error Type: Your link should be a string", "youtubeUrl");
+        return;
     }
     else {
         if (!req.body.youtubeUrl) {
             errorsCollect(errors, "Error Type: You should specify your link", "youtubeUrl");
+            return;
         }
         console.log(req.body.youtubeUrl);
         if (req.body.youtubeUrl.length > 100) {
             errorsCollect(errors, "Error Type: Your link should be less than 100 symbols", "youtubeUrl");
+            return;
         }
         if (!reg.test(req.body.youtubeUrl)) {
             errorsCollect(errors, "Error Type: You should specify valid url", "youtubeUrl");
@@ -259,10 +279,6 @@ app.put('/bloggers/:id', (req, res) => {
     }
     if (errors.length !== 0) {
         errorResponse(res, errors, 400);
-    }
-    if (!blogger) {
-        errorsCollect(errors, "Error Type: Your id is out of range", "id");
-        errorResponse(res, errors, 404);
     }
     /*    if (errors.length !== 0 || !blogger) {
             const responseObj: APIErrorResultType = {
@@ -296,6 +312,7 @@ app.delete('/bloggers/:id', (req, res) => {
     const blogger = bloggers.find(bl => bl.id === id);
     if (!id) {
         errorsCollect(errors, "Error Type: You should specify the id", "id");
+        return;
     }
     /*    // Кмк, эта проверка не нужна, т.к. выше мы из айдишки делаем намбер.
         if (Number.isNaN(req.params.id)) {
@@ -308,6 +325,7 @@ app.delete('/bloggers/:id', (req, res) => {
     if (!blogger) {
         // errorsCollect(errors, "Error Type: Your id is out of range", "id")
         errorResponse(res, errors, 404);
+        return;
     }
     if (errors.length !== 0) {
         errorResponse(res, errors, 400);
@@ -362,45 +380,56 @@ app.post('/posts', (req, res) => {
     // ------------------------------------------------ Проеврка тайтла ------------------------------------------------
     if (typeof req.body.title !== "string") {
         errorsCollect(errors, "Error Type: Your title should by type string", "title");
+        return;
     }
     else {
         if (!req.body.title.trim()) {
             errorsCollect(errors, "Error Type: You should specify the title", "title");
+            return;
         }
         if (req.body.title.length > 30) {
             errorsCollect(errors, "Error Type: Your title should be less than 30 symbols", "title");
+            return;
         }
     }
     // ---------------------------------------- Проверка короткого описания ---------------------------------------------
     if (typeof req.body.shortDescription !== "string") {
         errorsCollect(errors, "Error Type: Your input should be the string type", "shortDescription");
+        return;
     }
     else {
         if (!req.body.shortDescription.trim()) {
             errorsCollect(errors, "Error Type: You should specify the short description", "shortDescription");
+            return;
         }
         if (req.body.shortDescription.length > 100) {
             errorsCollect(errors, "Error Type: You should enter less than 100 symobls", "shortDescription");
+            return;
         }
     }
     // ------------------------------------------- Проверка контента -----------------------------------------------------
     if (typeof req.body.content !== "string") {
         errorsCollect(errors, "Error Type: Your content should be type string", "content");
+        return;
     }
     else {
         if (!req.body.content.trim()) {
             errorsCollect(errors, "Error Type: Your content is empty", "content");
+            return;
         }
         if (req.body.content.length > 1000) {
             errorsCollect(errors, "Error Type: Your content should be less than 1000 symbols", "content");
+            return;
         }
     }
     // ------------------------------------------ Проверка BloggerId ------------------------------------------------------
     if (!req.body.bloggerId) {
         errorsCollect(errors, "Error Type: You have empty id", "bloggerId");
+        return;
     }
     if (typeof req.body.bloggerId !== "number") {
         errorsCollect(errors, "Error Type: You should enter a number", "bloggerId");
+        return;
     }
     if (errors.length !== 0) {
         errorResponse(res, errors, 400);
@@ -438,6 +467,7 @@ app.get('/posts/:id', (req, res) => {
     const post = posts.find(p => p.id === id);
     if (!id) {
         errorsCollect(errors, "Error Type: You should specify some id", "id");
+        return;
     }
     if (!post) {
         errorsCollect(errors, "Error Type: Your id is out of range", "id");
@@ -490,52 +520,65 @@ app.put('/posts/:id', (req, res) => {
     const post = posts.find(p => p.id === id);
     if (!id) {
         errorsCollect(errors, "Error Type: You should specify the id", "id");
+        return;
     }
     // --------------------------------- Проверка тайтла ---------------------------------------------------------------
     if (typeof req.body.title !== "string") {
         errorsCollect(errors, "Error Type: Your title should be string type", "title");
+        return;
     }
     else {
         if (!req.body.title.trim()) {
             errorsCollect(errors, "Error Type: Your should specify the title", "title");
+            return;
         }
         if (req.body.title.length > 30) {
             errorsCollect(errors, "Error Type: Your title should be less than 30 symbols", "title");
+            return;
         }
     }
     // --------------------------------- Проверка короткого описания ----------------------------------------------------
     if (typeof req.body.shortDescription !== "string") {
         errorsCollect(errors, "Error Type: your short description should be string type", "shortDescription");
+        return;
     }
     else {
         if (!req.body.shortDescription.trim()) {
             errorsCollect(errors, "Error Type: You should specify the short descripiton", "shortDescription");
+            return;
         }
         if (req.body.shortDescription.length > 100) {
             errorsCollect(errors, "Error Type: Your short description should be less than 100", "shortDescription");
+            return;
         }
     }
     // --------------------------------------- Проверка контента ---------------------------------------------------------
     if (typeof req.body.content !== "string") {
         errorsCollect(errors, "Error Type: Your content should be the string", "content");
+        return;
     }
     else {
         if (!req.body.content.trim()) {
             errorsCollect(errors, "Error Type: You should specify the content", "content");
+            return;
         }
         if (req.body.content.length > 1000) {
             errorsCollect(errors, "Error Type: Your content should be less than 1000 symbols", "content");
+            return;
         }
     }
     // -------------------------------------- Проверка bloggerId ---------------------------------------------------------
     if (!req.body.bloggerId) {
         errorsCollect(errors, "Error Type: You should specify blogger Id", "bloggerId");
+        return;
     }
     if (typeof req.body.bloggerId !== "number") {
         errorsCollect(errors, "Error Type: Your blogger Id should be the number", "bloggerId");
+        return;
     }
     if (errors.length !== 0) {
         errorResponse(res, errors, 400);
+        return;
     }
     if (!post) {
         errorsCollect(errors, "Error Type: Your id is out of range", "id");
@@ -573,10 +616,12 @@ app.delete('/posts/:id', (req, res) => {
     const post = posts.find(p => p.id === id);
     if (!id) {
         errorsCollect(errors, "Error Type: You should specify the Id", "id");
+        return;
     }
     if (!post) {
         // errorsCollect(errors, "Error Type: Your Id is out of range", "id")
         errorResponse(res, errors, 404);
+        return;
     }
     if (errors.length !== 0) {
         errorResponse(res, errors, 400);
