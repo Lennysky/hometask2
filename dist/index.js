@@ -237,11 +237,11 @@ app.put('/bloggers/:id', (req, res) => {
         console.log('id', id);
     }
     else {
-        if (!req.body.name.trim()) {
+        if (!req.body.name) {
             errorsCollect(errors, "Error Type: You should define your name", "name");
             return;
         }
-        if (!req.body.name) {
+        if (!req.body.name.trim()) {
             errorsCollect(errors, "Error Type: You should define your name", "name");
             return;
         }
