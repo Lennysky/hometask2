@@ -179,8 +179,7 @@ app.get('/bloggers/:id', (req: Request, res: Response) => {
     const id = parseInt(req.params.id)
     const blogger = bloggers.find(bl => bl.id === id)
     if (!id) {
-        errorsCollect(errors, "Error type: You have no id", "id")
-        res.send(400)
+        errorResponse(res, errors, 404)
         return;
     }
     /*    if (Number.isNaN(id)) {
@@ -191,12 +190,13 @@ app.get('/bloggers/:id', (req: Request, res: Response) => {
             errors.push(error)
         }*/
     if (!blogger) {
-        errorsCollect(errors, "Error type: Your id is out of range", "id")
+        //errorsCollect(errors, "Error type: Your id is out of range", "id")
+        errorResponse(res, errors, 404)
         return
     }
-    if (errors.length !== 0) {
+   /* if (errors.length !== 0) {
         errorResponse(res, errors, 404)
-    } else {
+    }*/ else {
         //const blogger = bloggers.find(bl => bl.id === id)
         res.status(200)
         res.send(blogger)
@@ -314,13 +314,14 @@ app.delete('/bloggers/:id', (req: Request, res: Response) => {
     * */
     const errors: FieldErrorType[] = []
     const id = parseInt(req.params.id)
+    const blogger = bloggers.find(bl => bl.id === id)
     if (!id) {
         // errorsCollect(errors, "Error Type: You should specify the id", "id")
         errorResponse(res, errors, 404)
         //res.sendStatus(404)
         return
     }
-    const blogger = bloggers.find(bl => bl.id === id)
+    //const blogger = bloggers.find(bl => bl.id === id)
     /*    // Кмк, эта проверка не нужна, т.к. выше мы из айдишки делаем намбер.
         if (Number.isNaN(req.params.id)) {
             const error: FieldErrorType = {
