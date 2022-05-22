@@ -254,6 +254,10 @@ app.put('/bloggers/:id', (req: Request, res: Response) => {
             errorsCollect(errors, "Error Type: You should define your name", "name")
             return
         }
+        if(!req.body.name) {
+            errorsCollect(errors, "Error Type: You should define your name", "name")
+            return
+        }
         if (req.body.name.length > 15) {
             errorsCollect(errors, "Error Type: You should enter the name less than 15 symbols", "name")
             return
@@ -284,7 +288,7 @@ app.put('/bloggers/:id', (req: Request, res: Response) => {
     if (!blogger) {
         res.status(404).send()
         // errorResponse(res, errors, 404)
-        
+
     }
 
     /*    if (errors.length !== 0 || !blogger) {

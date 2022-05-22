@@ -241,6 +241,10 @@ app.put('/bloggers/:id', (req, res) => {
             errorsCollect(errors, "Error Type: You should define your name", "name");
             return;
         }
+        if (!req.body.name) {
+            errorsCollect(errors, "Error Type: You should define your name", "name");
+            return;
+        }
         if (req.body.name.length > 15) {
             errorsCollect(errors, "Error Type: You should enter the name less than 15 symbols", "name");
             return;
