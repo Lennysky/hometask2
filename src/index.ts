@@ -248,7 +248,7 @@ app.put('/bloggers/:id', (req: Request, res: Response) => {
 // ----------------------------------------- Проверка name ------------------------------------------------
     if (typeof req.body.name !== "string") {
         errorsCollect(errors, "Error Type: Your name should be a string type", "name")
-        return;
+
     } else {
         if (!req.body.name.trim()) {
             errorsCollect(errors, "Error Type: You should define your name", "name")
@@ -263,7 +263,6 @@ app.put('/bloggers/:id', (req: Request, res: Response) => {
 // -------------------------------------- Проверка youtubeUrl --------------------------------------------
     if (typeof req.body.youtubeUrl !== "string") {
         errorsCollect(errors, "Error Type: Your link should be a string", "youtubeUrl")
-        return;
     } else {
         if (!req.body.youtubeUrl) {
             errorsCollect(errors, "Error Type: You should specify your link", "youtubeUrl")
@@ -276,6 +275,7 @@ app.put('/bloggers/:id', (req: Request, res: Response) => {
         }
         if (!reg.test(req.body.youtubeUrl)) {
             errorsCollect(errors, "Error Type: You should specify valid url", "youtubeUrl")
+            return
         }
     }
     if (errors.length !== 0) {
@@ -390,7 +390,6 @@ app.post('/posts', (req: Request, res: Response) => {
 // ------------------------------------------------ Проеврка тайтла ------------------------------------------------
     if (typeof req.body.title !== "string") {
         errorsCollect(errors, "Error Type: Your title should by type string", "title")
-        return
     } else {
         if (!req.body.title.trim()) {
             errorsCollect(errors, "Error Type: You should specify the title", "title")
@@ -405,7 +404,6 @@ app.post('/posts', (req: Request, res: Response) => {
 // ---------------------------------------- Проверка короткого описания ---------------------------------------------
     if (typeof req.body.shortDescription !== "string") {
         errorsCollect(errors, "Error Type: Your input should be the string type", "shortDescription")
-        return;
     } else {
         if (!req.body.shortDescription.trim()) {
             errorsCollect(errors, "Error Type: You should specify the short description", "shortDescription")
@@ -420,7 +418,6 @@ app.post('/posts', (req: Request, res: Response) => {
 // ------------------------------------------- Проверка контента -----------------------------------------------------
     if (typeof req.body.content !== "string") {
         errorsCollect(errors, "Error Type: Your content should be type string", "content")
-        return;
     } else {
         if (!req.body.content.trim()) {
             errorsCollect(errors, "Error Type: Your content is empty", "content")
@@ -536,7 +533,6 @@ app.put('/posts/:id', (req: Request, res: Response) => {
 // --------------------------------- Проверка тайтла ---------------------------------------------------------------
     if (typeof req.body.title !== "string") {
         errorsCollect(errors, "Error Type: Your title should be string type", "title")
-        return;
     } else {
         if (!req.body.title.trim()) {
             errorsCollect(errors, "Error Type: Your should specify the title", "title")
@@ -550,7 +546,6 @@ app.put('/posts/:id', (req: Request, res: Response) => {
 // --------------------------------- Проверка короткого описания ----------------------------------------------------
     if (typeof req.body.shortDescription !== "string") {
         errorsCollect(errors, "Error Type: your short description should be string type", "shortDescription")
-        return;
     } else {
         if (!req.body.shortDescription.trim()) {
             errorsCollect(errors, "Error Type: You should specify the short descripiton", "shortDescription")
