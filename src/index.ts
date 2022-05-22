@@ -194,9 +194,9 @@ app.get('/bloggers/:id', (req: Request, res: Response) => {
         errorResponse(res, errors, 404)
         return
     }
-   /* if (errors.length !== 0) {
-        errorResponse(res, errors, 404)
-    }*/ else {
+    /* if (errors.length !== 0) {
+         errorResponse(res, errors, 404)
+     }*/ else {
         //const blogger = bloggers.find(bl => bl.id === id)
         res.status(200)
         res.send(blogger)
@@ -230,7 +230,7 @@ app.put('/bloggers/:id', (req: Request, res: Response) => {
     const blogger = bloggers.find(bl => bl.id === id)
     const reg = new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?")
     if (!id) {
-       errorResponse(res, errors, 404)
+        errorResponse(res, errors, 404)
         return;
     }
     console.log('id', id)
@@ -252,11 +252,11 @@ app.put('/bloggers/:id', (req: Request, res: Response) => {
     } else {
         if (!req.body.name.trim()) {
             errorsCollect(errors, "Error Type: You should define your name", "name")
-
+            return
         }
         if (req.body.name.length > 15) {
             errorsCollect(errors, "Error Type: You should enter the name less than 15 symbols", "name")
-
+            return
         }
     }
 //    console.log(req.body.youtubeUrl)
@@ -266,7 +266,7 @@ app.put('/bloggers/:id', (req: Request, res: Response) => {
     } else {
         if (!req.body.youtubeUrl) {
             errorsCollect(errors, "Error Type: You should specify your link", "youtubeUrl")
-
+            return
         }
         console.log(req.body.youtubeUrl)
         if (req.body.youtubeUrl.length > 100) {
@@ -275,7 +275,7 @@ app.put('/bloggers/:id', (req: Request, res: Response) => {
         }
         if (!reg.test(req.body.youtubeUrl)) {
             errorsCollect(errors, "Error Type: You should specify valid url", "youtubeUrl")
-
+            return
         }
     }
     if (errors.length !== 0) {
@@ -335,10 +335,10 @@ app.delete('/bloggers/:id', (req: Request, res: Response) => {
         errorResponse(res, errors, 404)
         return;
     }
-/*    if (errors.length !== 0) {
-        errorResponse(res, errors, 400)
-        return;
-    }*/
+    /*    if (errors.length !== 0) {
+            errorResponse(res, errors, 400)
+            return;
+        }*/
     /*  if (errors.length !== 0 || !blogger) {
           const responseObj: APIErrorResultType = {
               errorsMessages: errors,
@@ -397,7 +397,7 @@ app.post('/posts', (req: Request, res: Response) => {
     } else {
         if (!req.body.title.trim()) {
             errorsCollect(errors, "Error Type: You should specify the title", "title")
-           // return;
+            // return;
         }
 
         if (req.body.title.length > 30) {
@@ -408,41 +408,41 @@ app.post('/posts', (req: Request, res: Response) => {
 // ---------------------------------------- Проверка короткого описания ---------------------------------------------
     if (typeof req.body.shortDescription !== "string") {
         errorsCollect(errors, "Error Type: Your input should be the string type", "shortDescription")
-       // return
+        // return
     } else {
         if (!req.body.shortDescription.trim()) {
             errorsCollect(errors, "Error Type: You should specify the short description", "shortDescription")
-          //  return;
+            //  return;
         }
 
         if (req.body.shortDescription.length > 100) {
             errorsCollect(errors, "Error Type: You should enter less than 100 symobls", "shortDescription")
-           // return;
+            // return;
         }
     }
 // ------------------------------------------- Проверка контента -----------------------------------------------------
     if (typeof req.body.content !== "string") {
         errorsCollect(errors, "Error Type: Your content should be type string", "content")
-       // return
+        // return
     } else {
         if (!req.body.content.trim()) {
             errorsCollect(errors, "Error Type: Your content is empty", "content")
-           // return;
+            // return;
         }
         if (req.body.content.length > 1000) {
             errorsCollect(errors, "Error Type: Your content should be less than 1000 symbols", "content")
-           // return;
+            // return;
         }
     }
 // ------------------------------------------ Проверка BloggerId ------------------------------------------------------
 
     if (!req.body.bloggerId) {
         errorsCollect(errors, "Error Type: You have empty id", "bloggerId")
-       // return;
+        // return;
     }
     if (typeof req.body.bloggerId !== "number") {
         errorsCollect(errors, "Error Type: You should enter a number", "bloggerId")
-       // return;
+        // return;
     }
     if (errors.length !== 0) {
         errorResponse(res, errors, 400)
@@ -485,9 +485,9 @@ app.get('/posts/:id', (req: Request, res: Response) => {
     if (!post) {
         errorResponse(res, errors, 404)
     }
-    /*if (errors.length !== 0) {
-        errorResponse(res, errors, 400)
-    }*/
+        /*if (errors.length !== 0) {
+            errorResponse(res, errors, 400)
+        }*/
     /*    if (errors.length !== 0 || !post) {
             const responseObj: APIErrorResultType = {
                 errorsMessages: errors,
@@ -629,9 +629,9 @@ app.delete('/posts/:id', (req: Request, res: Response) => {
         // errorsCollect(errors, "Error Type: Your Id is out of range", "id")
         errorResponse(res, errors, 404)
     }
-/*    if (errors.length !== 0) {
-        errorResponse(res, errors, 400)
-    }*/
+        /*    if (errors.length !== 0) {
+                errorResponse(res, errors, 400)
+            }*/
     /*    if (errors.length !== 0 || !post) {
             const responseObj: APIErrorResultType = {
                 errorsMessages: errors,
