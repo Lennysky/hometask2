@@ -265,24 +265,27 @@ app.put('/bloggers/:id', (req, res) => {
     }*/
     //    console.log(req.body.youtubeUrl)
     // -------------------------------------- Проверка youtubeUrl --------------------------------------------
-    if (typeof req.body.youtubeUrl !== "string") {
-        errorsCollect(errors, "Error Type: Your link should be a string", "youtubeUrl");
+    let youtubeUrl = req.body.youtubeUrl;
+    if (!youtubeUrl || typeof youtubeUrl !== 'string' || youtubeUrl.length > 100 || !reg.test(youtubeUrl)) {
+        errorsCollect(errors, "Error Type: You should specify valid url", "youtubeUrl");
     }
-    else {
-        if (!req.body.youtubeUrl) {
-            errorsCollect(errors, "Error Type: You should specify your link", "youtubeUrl");
-            return;
-        }
-        console.log(req.body.youtubeUrl);
-        if (req.body.youtubeUrl.length > 100) {
-            errorsCollect(errors, "Error Type: Your link should be less than 100 symbols", "youtubeUrl");
-            return;
-        }
-        if (!reg.test(req.body.youtubeUrl)) {
-            errorsCollect(errors, "Error Type: You should specify valid url", "youtubeUrl");
-            return;
-        }
-    }
+    /* if (typeof req.body.youtubeUrl !== "string") {
+         errorsCollect(errors, "Error Type: Your link should be a string", "youtubeUrl")
+     } else {
+         if (!req.body.youtubeUrl) {
+             errorsCollect(errors, "Error Type: You should specify your link", "youtubeUrl")
+             return
+         }
+         console.log(req.body.youtubeUrl)
+         if (req.body.youtubeUrl.length > 100) {
+             errorsCollect(errors, "Error Type: Your link should be less than 100 symbols", "youtubeUrl")
+             return
+         }
+         if (!reg.test(req.body.youtubeUrl)) {
+             errorsCollect(errors, "Error Type: You should specify valid url", "youtubeUrl")
+             return
+         }
+     }*/
     if (errors.length !== 0) {
         errorResponse(res, errors, 400);
     }

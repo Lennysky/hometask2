@@ -248,7 +248,7 @@ app.put('/bloggers/:id', (req: Request, res: Response) => {
 let name = req.body.name
     if (!name || typeof name !== 'string' || !name.trim() || name.length > 15) {
         errorsCollect(errors, "Error Type: You should define your name", "name")
-        
+
      /*   res.status(400).send({
             errorsMessages: [{
                 message: 'Incorrect name',
@@ -282,7 +282,14 @@ let name = req.body.name
     }*/
 //    console.log(req.body.youtubeUrl)
 // -------------------------------------- Проверка youtubeUrl --------------------------------------------
-    if (typeof req.body.youtubeUrl !== "string") {
+    let youtubeUrl = req.body.youtubeUrl;
+    if (!youtubeUrl || typeof youtubeUrl !== 'string' || youtubeUrl.length > 100 || !reg.test(youtubeUrl)) {
+        errorsCollect (errors, "Error Type: You should specify valid url", "youtubeUrl")
+    }
+
+
+
+   /* if (typeof req.body.youtubeUrl !== "string") {
         errorsCollect(errors, "Error Type: Your link should be a string", "youtubeUrl")
     } else {
         if (!req.body.youtubeUrl) {
@@ -298,7 +305,7 @@ let name = req.body.name
             errorsCollect(errors, "Error Type: You should specify valid url", "youtubeUrl")
             return
         }
-    }
+    }*/
     if (errors.length !== 0) {
         errorResponse(res, errors, 400)
     }
