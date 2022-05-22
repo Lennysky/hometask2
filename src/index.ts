@@ -231,6 +231,7 @@ app.put('/bloggers/:id', (req: Request, res: Response) => {
     const reg = new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?")
     if (!id) {
        errorResponse(res, errors, 404)
+        return;
     }
     console.log('id', id)
     /*    if (Number.isNaN(id)) {
