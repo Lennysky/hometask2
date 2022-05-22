@@ -244,48 +244,11 @@ app.put('/bloggers/:id', (req, res) => {
            })
            */
     }
-    /*if (!req.body.name) {
-        errorsCollect(errors, "Error Type: You should define your name", "name")
-        return
-    }
-
-    if (typeof req.body.name !== "string") {
-        errorsCollect(errors, "Error Type: Your name should be a string type", "name")
-        console.log('id', id)
-
-    } else {
-        if (!req.body.name.trim()) {
-            errorsCollect(errors, "Error Type: You should define your name", "name")
-            return
-        }
-        if (req.body.name.length > 15) {
-            errorsCollect(errors, "Error Type: You should enter the name less than 15 symbols", "name")
-            return
-        }
-    }*/
-    //    console.log(req.body.youtubeUrl)
     // -------------------------------------- Проверка youtubeUrl --------------------------------------------
     let youtubeUrl = req.body.youtubeUrl;
     if (!youtubeUrl || typeof youtubeUrl !== 'string' || youtubeUrl.length > 100 || !reg.test(youtubeUrl)) {
         errorsCollect(errors, "Error Type: You should specify valid url", "youtubeUrl");
     }
-    /* if (typeof req.body.youtubeUrl !== "string") {
-         errorsCollect(errors, "Error Type: Your link should be a string", "youtubeUrl")
-     } else {
-         if (!req.body.youtubeUrl) {
-             errorsCollect(errors, "Error Type: You should specify your link", "youtubeUrl")
-             return
-         }
-         console.log(req.body.youtubeUrl)
-         if (req.body.youtubeUrl.length > 100) {
-             errorsCollect(errors, "Error Type: Your link should be less than 100 symbols", "youtubeUrl")
-             return
-         }
-         if (!reg.test(req.body.youtubeUrl)) {
-             errorsCollect(errors, "Error Type: You should specify valid url", "youtubeUrl")
-             return
-         }
-     }*/
     if (errors.length !== 0) {
         errorResponse(res, errors, 400);
     }
@@ -392,51 +355,62 @@ app.post('/posts', (req, res) => {
     * БлогерНэйм -
     * */
     const errors = [];
-    // ------------------------------------------------ Проеврка тайтла ------------------------------------------------
-    if (typeof req.body.title !== "string") {
-        errorsCollect(errors, "Error Type: Your title should by type string", "title");
-        //return
+    let title = req.body.title;
+    if (!title || typeof title !== 'string' || !title.trim() || title.length > 30) {
+        errorsCollect(errors, "Error Type: Your title should be correct", "title");
     }
-    else {
-        if (!req.body.title.trim()) {
-            errorsCollect(errors, "Error Type: You should specify the title", "title");
-            // return;
-        }
-        if (req.body.title.length > 30) {
-            errorsCollect(errors, "Error Type: Your title should be less than 30 symbols", "title");
-            //return;
-        }
-    }
+    /*// ------------------------------------------------ Проеврка тайтла ------------------------------------------------
+        if (typeof req.body.title !== "string") {
+            errorsCollect(errors, "Error Type: Your title should by type string", "title")
+            //return
+        } else {
+            if (!req.body.title.trim()) {
+                errorsCollect(errors, "Error Type: You should specify the title", "title")
+                // return;
+            }
+    
+            if (req.body.title.length > 30) {
+                errorsCollect(errors, "Error Type: Your title should be less than 30 symbols", "title")
+                //return;
+            }
+        }*/
     // ---------------------------------------- Проверка короткого описания ---------------------------------------------
-    if (typeof req.body.shortDescription !== "string") {
-        errorsCollect(errors, "Error Type: Your input should be the string type", "shortDescription");
-        // return
+    let shortDescription = req.body.shortDescription;
+    if (!shortDescription || typeof shortDescription !== 'string' || !shortDescription.trim() || shortDescription.length > 100) {
+        errorsCollect(errors, "Error Type: Your input should be correct", "shortDescription");
     }
-    else {
-        if (!req.body.shortDescription.trim()) {
-            errorsCollect(errors, "Error Type: You should specify the short description", "shortDescription");
-            //  return;
-        }
-        if (req.body.shortDescription.length > 100) {
-            errorsCollect(errors, "Error Type: You should enter less than 100 symobls", "shortDescription");
-            // return;
-        }
-    }
+    /*    if (typeof req.body.shortDescription !== "string") {
+            errorsCollect(errors, "Error Type: Your input should be the string type", "shortDescription")
+            // return
+        } else {
+            if (!req.body.shortDescription.trim()) {
+                errorsCollect(errors, "Error Type: You should specify the short description", "shortDescription")
+                //  return;
+            }
+    
+            if (req.body.shortDescription.length > 100) {
+                errorsCollect(errors, "Error Type: You should enter less than 100 symobls", "shortDescription")
+                // return;
+            }
+        }*/
     // ------------------------------------------- Проверка контента -----------------------------------------------------
-    if (typeof req.body.content !== "string") {
-        errorsCollect(errors, "Error Type: Your content should be type string", "content");
-        // return
+    let content = req.body.content;
+    if (!content || typeof content !== 'string' || !content.trim() || content.length > 1000) {
+        errorsCollect(errors, "Error Type: Your content should be correct", "content");
     }
-    else {
-        if (!req.body.content.trim()) {
-            errorsCollect(errors, "Error Type: Your content is empty", "content");
-            // return;
-        }
-        if (req.body.content.length > 1000) {
-            errorsCollect(errors, "Error Type: Your content should be less than 1000 symbols", "content");
-            // return;
-        }
-    }
+    /* if (typeof req.body.content !== "string") {
+         errorsCollect(errors, "Error Type: Your content should be type string", "content")
+         // return
+     } else {
+         if (!req.body.content.trim()) {
+             errorsCollect(errors, "Error Type: Your content is empty", "content")
+             // return;
+         }
+         if (req.body.content.length > 1000) {
+             errorsCollect(errors, "Error Type: Your content should be less than 1000 symbols", "content")
+             // return;
+         }
+     }*/
     // ------------------------------------------ Проверка BloggerId ------------------------------------------------------
     if (!req.body.bloggerId) {
         errorsCollect(errors, "Error Type: You have empty id", "bloggerId");
