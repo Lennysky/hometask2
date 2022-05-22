@@ -124,32 +124,27 @@ app.post('/bloggers', (req: Request, res: Response) => {
     if (typeof req.body.name !== "string") {
         console.log(req.body.name)
         errorsCollect(errors, "Error Type: Name should be the string", "name")
-        return
     } else {
         if (!req.body.name.trim()) {
             errorsCollect(errors, "Error Type: the field is empty", "name")
-            return;
         }
         if (req.body.name.length > 15) {
             errorsCollect(errors, "Error Type: Yor name should be less than 15 symbols", "name")
-            return;
         }
         // ------------ Проверка урла --------------------------------------
     }
     //const test =  reg.test(req.body.youtubeUrl)
     if (!reg.test(req.body.youtubeUrl)) {
         errorsCollect(errors, "Error Type: your Url is empty or not valid", "youtubeUrl")
-        return;
     } else {
         //console.log('else', req.body.youtubeUrl.length)
         if (!req.body.youtubeUrl.trim()) {
             errorsCollect(errors, "Error type: the field is empty", "youtubeUrl")
-            return;
         }
         if (req.body.youtubeUrl.length > 100) {
             //console.log('url err')
             errorsCollect(errors, "Error type: the field should be less than 100 symbols", "youtubeUrl")
-            return;
+
         }
         /*
         * Если ошибка юзера - 201. result code 1, ты ошибся.
@@ -235,8 +230,7 @@ app.put('/bloggers/:id', (req: Request, res: Response) => {
     const blogger = bloggers.find(bl => bl.id === id)
     const reg = new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?")
     if (!id) {
-        errorsCollect(errors, "Error Type: You have no id", "id")
-        return
+       res.sendStatus(404)
     }
     console.log('id', id)
     /*    if (Number.isNaN(id)) {
