@@ -232,24 +232,37 @@ app.put('/bloggers/:id', (req, res) => {
             errors.push(error)
         }*/
     // ----------------------------------------- Проверка name ------------------------------------------------
-    if (typeof req.body.name !== "string") {
-        errorsCollect(errors, "Error Type: Your name should be a string type", "name");
-        console.log('id', id);
+    let name = req.body.name;
+    if (!name || typeof name !== 'string' || !name.trim() || name.length > 15) {
+        errorsCollect(errors, "Error Type: You should define your name", "name");
+        /*   res.status(400).send({
+               errorsMessages: [{
+                   message: 'Incorrect name',
+                   field: 'title'
+               }],
+               resultCode: 1
+           })
+           */
     }
-    else {
-        if (!req.body.name) {
-            errorsCollect(errors, "Error Type: You should define your name", "name");
-            return;
-        }
+    /*if (!req.body.name) {
+        errorsCollect(errors, "Error Type: You should define your name", "name")
+        return
+    }
+
+    if (typeof req.body.name !== "string") {
+        errorsCollect(errors, "Error Type: Your name should be a string type", "name")
+        console.log('id', id)
+
+    } else {
         if (!req.body.name.trim()) {
-            errorsCollect(errors, "Error Type: You should define your name", "name");
-            return;
+            errorsCollect(errors, "Error Type: You should define your name", "name")
+            return
         }
         if (req.body.name.length > 15) {
-            errorsCollect(errors, "Error Type: You should enter the name less than 15 symbols", "name");
-            return;
+            errorsCollect(errors, "Error Type: You should enter the name less than 15 symbols", "name")
+            return
         }
-    }
+    }*/
     //    console.log(req.body.youtubeUrl)
     // -------------------------------------- Проверка youtubeUrl --------------------------------------------
     if (typeof req.body.youtubeUrl !== "string") {
