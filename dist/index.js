@@ -219,7 +219,7 @@ app.put('/bloggers/:id', (req, res) => {
     const blogger = bloggers.find(bl => bl.id === id);
     const reg = new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?");
     if (!id) {
-        res.sendStatus(404);
+        errorResponse(res, errors, 404);
     }
     console.log('id', id);
     /*    if (Number.isNaN(id)) {
@@ -230,7 +230,6 @@ app.put('/bloggers/:id', (req, res) => {
             errors.push(error)
         }*/
     if (!blogger) {
-        errorsCollect(errors, "Error Type: Your id is out of range", "id");
         errorResponse(res, errors, 404);
         return;
     }
@@ -456,17 +455,15 @@ app.get('/posts/:id', (req, res) => {
     const id = parseInt(req.params.id);
     const post = posts.find(p => p.id === id);
     if (!id) {
-        errorsCollect(errors, "Error Type: You should specify some id", "id");
-        return;
-    }
-    if (!post) {
-        errorsCollect(errors, "Error Type: Your id is out of range", "id");
         errorResponse(res, errors, 404);
         return;
     }
-    if (errors.length !== 0) {
-        errorResponse(res, errors, 400);
+    if (!post) {
+        errorResponse(res, errors, 404);
     }
+    /*if (errors.length !== 0) {
+        errorResponse(res, errors, 400)
+    }*/
     /*    if (errors.length !== 0 || !post) {
             const responseObj: APIErrorResultType = {
                 errorsMessages: errors,
@@ -509,7 +506,7 @@ app.put('/posts/:id', (req, res) => {
     const id = parseInt(req.params.id);
     const post = posts.find(p => p.id === id);
     if (!id) {
-        errorsCollect(errors, "Error Type: You should specify the id", "id");
+        errorResponse(res, errors, 404);
         return;
     }
     // --------------------------------- Проверка тайтла ---------------------------------------------------------------
@@ -569,7 +566,6 @@ app.put('/posts/:id', (req, res) => {
         return;
     }
     if (!post) {
-        errorsCollect(errors, "Error Type: Your id is out of range", "id");
         errorResponse(res, errors, 404);
     }
     /*    if (errors.length !== 0 || !post) {
@@ -609,11 +605,10 @@ app.delete('/posts/:id', (req, res) => {
     if (!post) {
         // errorsCollect(errors, "Error Type: Your Id is out of range", "id")
         errorResponse(res, errors, 404);
-        return;
     }
-    if (errors.length !== 0) {
-        errorResponse(res, errors, 400);
-    }
+    /*    if (errors.length !== 0) {
+            errorResponse(res, errors, 400)
+        }*/
     /*    if (errors.length !== 0 || !post) {
             const responseObj: APIErrorResultType = {
                 errorsMessages: errors,
