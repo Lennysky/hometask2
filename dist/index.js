@@ -309,11 +309,12 @@ app.delete('/bloggers/:id', (req, res) => {
     * */
     const errors = [];
     const id = parseInt(req.params.id);
-    const blogger = bloggers.find(bl => bl.id === id);
     if (!id) {
-        errorsCollect(errors, "Error Type: You should specify the id", "id");
+        // errorsCollect(errors, "Error Type: You should specify the id", "id")
+        res.sendStatus(404);
         return;
     }
+    const blogger = bloggers.find(bl => bl.id === id);
     /*    // Кмк, эта проверка не нужна, т.к. выше мы из айдишки делаем намбер.
         if (Number.isNaN(req.params.id)) {
             const error: FieldErrorType = {
@@ -329,6 +330,7 @@ app.delete('/bloggers/:id', (req, res) => {
     }
     if (errors.length !== 0) {
         errorResponse(res, errors, 400);
+        return;
     }
     /*  if (errors.length !== 0 || !blogger) {
           const responseObj: APIErrorResultType = {
@@ -337,10 +339,8 @@ app.delete('/bloggers/:id', (req, res) => {
           }
           res.send(responseObj)
       } */
-    else {
-        bloggers = bloggers.filter(bl => bl.id !== id);
-        res.status(204).send();
-    }
+    bloggers = bloggers.filter(bl => bl.id !== id);
+    res.status(204).send();
 });
 app.get('/posts', (req, res) => {
     res.status(200).send(posts);

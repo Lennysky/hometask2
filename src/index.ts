@@ -320,11 +320,12 @@ app.delete('/bloggers/:id', (req: Request, res: Response) => {
     * */
     const errors: FieldErrorType[] = []
     const id = parseInt(req.params.id)
-    const blogger = bloggers.find(bl => bl.id === id)
     if (!id) {
-        errorsCollect(errors, "Error Type: You should specify the id", "id")
+        // errorsCollect(errors, "Error Type: You should specify the id", "id")
+        res.sendStatus(404)
         return
     }
+    const blogger = bloggers.find(bl => bl.id === id)
     /*    // Кмк, эта проверка не нужна, т.к. выше мы из айдишки делаем намбер.
         if (Number.isNaN(req.params.id)) {
             const error: FieldErrorType = {
@@ -334,12 +335,13 @@ app.delete('/bloggers/:id', (req: Request, res: Response) => {
             errors.push(error)
         }*/
     if (!blogger) {
-       // errorsCollect(errors, "Error Type: Your id is out of range", "id")
+        // errorsCollect(errors, "Error Type: Your id is out of range", "id")
         errorResponse(res, errors, 404)
         return;
     }
     if (errors.length !== 0) {
         errorResponse(res, errors, 400)
+        return;
     }
     /*  if (errors.length !== 0 || !blogger) {
           const responseObj: APIErrorResultType = {
@@ -349,10 +351,10 @@ app.delete('/bloggers/:id', (req: Request, res: Response) => {
           res.send(responseObj)
       } */
 
-    else {
-        bloggers = bloggers.filter(bl => bl.id !== id)
-        res.status(204).send()
-    }
+
+    bloggers = bloggers.filter(bl => bl.id !== id)
+    res.status(204).send()
+
 })
 
 app.get('/posts', (req: Request, res: Response) => {
@@ -632,20 +634,20 @@ app.delete('/posts/:id', (req: Request, res: Response) => {
         return
     }
     if (!post) {
-       // errorsCollect(errors, "Error Type: Your Id is out of range", "id")
+        // errorsCollect(errors, "Error Type: Your Id is out of range", "id")
         errorResponse(res, errors, 404)
         return;
     }
     if (errors.length !== 0) {
         errorResponse(res, errors, 400)
     }
-/*    if (errors.length !== 0 || !post) {
-        const responseObj: APIErrorResultType = {
-            errorsMessages: errors,
-            resultCode: !post ? 400 : 404
-        }
-        res.send(responseObj)
-    } */
+    /*    if (errors.length !== 0 || !post) {
+            const responseObj: APIErrorResultType = {
+                errorsMessages: errors,
+                resultCode: !post ? 400 : 404
+            }
+            res.send(responseObj)
+        } */
     else {
         posts = posts.filter(p => p.id !== id)
         res.status(204).send()
