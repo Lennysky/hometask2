@@ -252,11 +252,11 @@ app.put('/bloggers/:id', (req: Request, res: Response) => {
     } else {
         if (!req.body.name.trim()) {
             errorsCollect(errors, "Error Type: You should define your name", "name")
-            return;
+
         }
         if (req.body.name.length > 15) {
             errorsCollect(errors, "Error Type: You should enter the name less than 15 symbols", "name")
-            return;
+
         }
     }
 //    console.log(req.body.youtubeUrl)
@@ -266,16 +266,16 @@ app.put('/bloggers/:id', (req: Request, res: Response) => {
     } else {
         if (!req.body.youtubeUrl) {
             errorsCollect(errors, "Error Type: You should specify your link", "youtubeUrl")
-            return;
+
         }
         console.log(req.body.youtubeUrl)
         if (req.body.youtubeUrl.length > 100) {
             errorsCollect(errors, "Error Type: Your link should be less than 100 symbols", "youtubeUrl")
-            return;
+
         }
         if (!reg.test(req.body.youtubeUrl)) {
             errorsCollect(errors, "Error Type: You should specify valid url", "youtubeUrl")
-            return
+
         }
     }
     if (errors.length !== 0) {
