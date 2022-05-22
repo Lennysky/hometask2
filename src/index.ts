@@ -254,7 +254,7 @@ app.put('/bloggers/:id', (req: Request, res: Response) => {
             errorsCollect(errors, "Error Type: You should define your name", "name")
             return
         }
-        if(!req.body.name) {
+        if (!req.body.name) {
             errorsCollect(errors, "Error Type: You should define your name", "name")
             return
         }
