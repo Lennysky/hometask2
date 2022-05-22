@@ -303,7 +303,8 @@ app.delete('/bloggers/:id', (req, res) => {
     const id = parseInt(req.params.id);
     if (!id) {
         // errorsCollect(errors, "Error Type: You should specify the id", "id")
-        res.sendStatus(404);
+        errorResponse(res, errors, 404);
+        //res.sendStatus(404)
         return;
     }
     const blogger = bloggers.find(bl => bl.id === id);
@@ -320,10 +321,10 @@ app.delete('/bloggers/:id', (req, res) => {
         errorResponse(res, errors, 404);
         return;
     }
-    if (errors.length !== 0) {
-        errorResponse(res, errors, 400);
-        return;
-    }
+    /*    if (errors.length !== 0) {
+            errorResponse(res, errors, 400)
+            return;
+        }*/
     /*  if (errors.length !== 0 || !blogger) {
           const responseObj: APIErrorResultType = {
               errorsMessages: errors,
@@ -602,7 +603,7 @@ app.delete('/posts/:id', (req, res) => {
     const id = parseInt(req.params.id);
     const post = posts.find(p => p.id === id);
     if (!id) {
-        errorsCollect(errors, "Error Type: You should specify the Id", "id");
+        errorResponse(res, errors, 404);
         return;
     }
     if (!post) {
