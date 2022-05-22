@@ -393,53 +393,56 @@ app.post('/posts', (req: Request, res: Response) => {
 // ------------------------------------------------ Проеврка тайтла ------------------------------------------------
     if (typeof req.body.title !== "string") {
         errorsCollect(errors, "Error Type: Your title should by type string", "title")
+        //return
     } else {
         if (!req.body.title.trim()) {
             errorsCollect(errors, "Error Type: You should specify the title", "title")
-            return;
+           // return;
         }
 
         if (req.body.title.length > 30) {
             errorsCollect(errors, "Error Type: Your title should be less than 30 symbols", "title")
-            return;
+            //return;
         }
     }
 // ---------------------------------------- Проверка короткого описания ---------------------------------------------
     if (typeof req.body.shortDescription !== "string") {
         errorsCollect(errors, "Error Type: Your input should be the string type", "shortDescription")
+       // return
     } else {
         if (!req.body.shortDescription.trim()) {
             errorsCollect(errors, "Error Type: You should specify the short description", "shortDescription")
-            return;
+          //  return;
         }
 
         if (req.body.shortDescription.length > 100) {
             errorsCollect(errors, "Error Type: You should enter less than 100 symobls", "shortDescription")
-            return;
+           // return;
         }
     }
 // ------------------------------------------- Проверка контента -----------------------------------------------------
     if (typeof req.body.content !== "string") {
         errorsCollect(errors, "Error Type: Your content should be type string", "content")
+       // return
     } else {
         if (!req.body.content.trim()) {
             errorsCollect(errors, "Error Type: Your content is empty", "content")
-            return;
+           // return;
         }
         if (req.body.content.length > 1000) {
             errorsCollect(errors, "Error Type: Your content should be less than 1000 symbols", "content")
-            return;
+           // return;
         }
     }
 // ------------------------------------------ Проверка BloggerId ------------------------------------------------------
 
     if (!req.body.bloggerId) {
         errorsCollect(errors, "Error Type: You have empty id", "bloggerId")
-        return;
+       // return;
     }
     if (typeof req.body.bloggerId !== "number") {
         errorsCollect(errors, "Error Type: You should enter a number", "bloggerId")
-        return;
+       // return;
     }
     if (errors.length !== 0) {
         errorResponse(res, errors, 400)
