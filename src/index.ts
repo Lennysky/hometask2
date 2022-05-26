@@ -540,6 +540,8 @@ app.put('/posts/:id', (req: Request, res: Response) => {
     const errors: FieldErrorType[] = []
     const id = parseInt(req.params.id)
 
+    const {bloggerId}  = req.body as PostInputModelType
+
     if (!id) {
         errorResponse(res, errors, 404)
         return
@@ -588,12 +590,18 @@ app.put('/posts/:id', (req: Request, res: Response) => {
 // -------------------------------------- Проверка bloggerId ---------------------------------------------------------
     if (!req.body.bloggerId) {
         errorsCollect(errors, "Error Type: You should specify blogger Id", "bloggerId")
-
     }
+
     if (typeof req.body.bloggerId !== "number") {
         errorsCollect(errors, "Error Type: Your blogger Id should be the number", "bloggerId")
-
     }
+
+    const blogger = bloggers.find(bl => bl.id === bloggerId)
+    if (!blogger) {
+        errorsCollect(errors, "Error Type: Your should have blogger Id", "bloggerId")
+    }
+
+
     if (errors.length !== 0) {
         errorResponse(res, errors, 400)
 
