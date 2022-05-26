@@ -454,6 +454,13 @@ let title = req.body.title;
         errorsCollect(errors, "Error Type: You should enter a number", "bloggerId")
         // return;
     }
+
+    const blogger = bloggers.find(bl => bl.id === req.body.bloggerId)
+    if (!blogger) {
+        errorsCollect(errors, "Error Type: Your should have blogger Id", "bloggerId")
+    }
+
+
     if (errors.length !== 0) {
         errorResponse(res, errors, 400)
     } else {
