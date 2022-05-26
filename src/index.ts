@@ -539,22 +539,25 @@ app.put('/posts/:id', (req: Request, res: Response) => {
     * */
     const errors: FieldErrorType[] = []
     const id = parseInt(req.params.id)
-    const post = posts.find(p => p.id === id)
+
     if (!id) {
         errorResponse(res, errors, 404)
         return
     }
+
+    const post = posts.find(p => p.id === id)
 // --------------------------------- Проверка тайтла ---------------------------------------------------------------
     if (typeof req.body.title !== "string") {
         errorsCollect(errors, "Error Type: Your title should be string type", "title")
     } else {
+        debugger
         if (!req.body.title.trim()) {
             errorsCollect(errors, "Error Type: Your should specify the title", "title")
-            return;
+
         }
         if (req.body.title.length > 30) {
             errorsCollect(errors, "Error Type: Your title should be less than 30 symbols", "title")
-            return;
+
         }
     }
 // --------------------------------- Проверка короткого описания ----------------------------------------------------
@@ -563,39 +566,37 @@ app.put('/posts/:id', (req: Request, res: Response) => {
     } else {
         if (!req.body.shortDescription.trim()) {
             errorsCollect(errors, "Error Type: You should specify the short descripiton", "shortDescription")
-            return;
+
         }
         if (req.body.shortDescription.length > 100) {
             errorsCollect(errors, "Error Type: Your short description should be less than 100", "shortDescription")
-            return;
+
         }
     }
 // --------------------------------------- Проверка контента ---------------------------------------------------------
     if (typeof req.body.content !== "string") {
         errorsCollect(errors, "Error Type: Your content should be the string", "content")
-        return;
     } else {
         if (!req.body.content.trim()) {
             errorsCollect(errors, "Error Type: You should specify the content", "content")
-            return;
+
         }
         if (req.body.content.length > 1000) {
             errorsCollect(errors, "Error Type: Your content should be less than 1000 symbols", "content")
-            return;
         }
     }
 // -------------------------------------- Проверка bloggerId ---------------------------------------------------------
     if (!req.body.bloggerId) {
         errorsCollect(errors, "Error Type: You should specify blogger Id", "bloggerId")
-        return;
+
     }
     if (typeof req.body.bloggerId !== "number") {
         errorsCollect(errors, "Error Type: Your blogger Id should be the number", "bloggerId")
-        return;
+
     }
     if (errors.length !== 0) {
         errorResponse(res, errors, 400)
-        return;
+
     }
     if (!post) {
         errorResponse(res, errors, 404)
